@@ -1,3 +1,4 @@
+import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import proxyOptions from './proxyOptions';
@@ -8,6 +9,11 @@ export default defineConfig({
 	server: {
 		port: 8080,
 		proxy: proxyOptions
+	},
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, 'src')
+		}
 	},
 	build: {
 		outDir: '../doppio/public/vision',

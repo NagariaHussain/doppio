@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/NagariaHussain/doppio/issues"
   },
-  "homepage": "https://github.com/NagariaHussain/doppio#readme"
+  "homepage": "https://github.com/NagariaHussain/doppio#readme",
+  "devDependencies": {
+    "vite": "^2.4.2"
+  }
 }

@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "cd vision && yarn dev",
+    "build": "NODE_ENV=production yarn run build-all",
+    "build-all": "yarn run build-app",
     "build-app": "cd vision && yarn build"
   },
   "repository": {

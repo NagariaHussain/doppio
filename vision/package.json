@@ -2,7 +2,8 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --base=/assets/doppio/vision/ && yarn copy-html-entry",
+    "copy-html-entry": "cp ../doppio/public/vision/index.html ../doppio/www/vision.html",
     "serve": "vite preview"
   },
   "dependencies": {

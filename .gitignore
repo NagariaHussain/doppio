@@ -5,3 +5,10 @@
 tags
 doppio/docs/current
 node_modules/
+
+doppio/docs/current
+doppio/public/vision
+doppio/www/vision.html
+doppio/public/css/email.css
+vision/tailwind.theme.json
+vision/dist/assets

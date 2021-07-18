@@ -44,7 +44,7 @@ app_license = "MIT"
 
 # website user home page (by Role)
 # role_home_page = {
-#	"Role": "home_page"
+# 	"Role": "home_page"
 # }
 
 # Generators
@@ -52,6 +52,10 @@ app_license = "MIT"
 
 # automatically create page for each record of this doctype
 # website_generators = ["Web Page"]
+
+website_route_rules = [
+	{"from_route": "/vision/<path:app_path>", "to_route": "vision"},
+]
 
 # Jinja
 # ----------
@@ -103,7 +107,7 @@ app_license = "MIT"
 # 		"on_update": "method",
 # 		"on_cancel": "method",
 # 		"on_trash": "method"
-#	}
+# 	}
 # }
 
 # Scheduled Tasks
@@ -181,4 +185,3 @@ app_license = "MIT"
 # auth_hooks = [
 # 	"doppio.auth.validate"
 # ]
-

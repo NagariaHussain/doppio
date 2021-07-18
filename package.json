@@ -1,0 +1,23 @@
+{
+  "name": "doppio",
+  "version": "0.0.1",
+  "description": "A dream.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd vision && yarn dev",
+    "build-app": "cd vision && yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NagariaHussain/doppio.git"
+  },
+  "keywords": [
+    "doppio"
+  ],
+  "author": "Hussain Nagaria",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NagariaHussain/doppio/issues"
+  },
+  "homepage": "https://github.com/NagariaHussain/doppio#readme"
+}

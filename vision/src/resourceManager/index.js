@@ -21,22 +21,10 @@ let plugin = {
 		}
 
 		if (!Object.prototype.hasOwnProperty.call(this, '$resources')) {
-			// console.log(this);
-			// Object.defineProperty(this, '$resources', {
-			// 	get: () => resourceManager.resources,
-			// });
-			// console.log(resourceManager.resources);
-			console.log('indexjs, beforeCreate: ', resourceManager.resources);
 			this.$resources = reactive(resourceManager.resources);
 		}
 
-		console.log('vmOptions.computed inside beforeCreate', vmOptions.computed);
-
-		// console.log(this);
-		// window.h = this;
 		Object.keys(vmOptions.resources).forEach((key) => {
-			console.log('key', key);
-			console.log('indexjs, beforeCreate: vmOptions.resources.key', key);
 			if (
 				!(
 					hasKey(vmOptions.computed, key) ||
@@ -44,7 +32,6 @@ let plugin = {
 					hasKey(vmOptions.methods, key)
 				)
 			) {
-				console.log('beforeCreate computed: ', vmOptions.computed);
 				vmOptions.computed[key] = vmOptions.resources[key];
 			}
 		});
@@ -65,7 +52,7 @@ let plugin = {
 	},
 };
 
-export default function install(app, options) {
+export default function install(app) {
 	app.mixin(plugin);
 }
 

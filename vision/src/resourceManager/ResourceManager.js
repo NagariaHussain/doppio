@@ -29,7 +29,6 @@ export default class ResourceManager {
 			}
 		}
 		this.resources = resources;
-		window.rs = resources;
 	}
 
 	init() {
@@ -38,11 +37,6 @@ export default class ResourceManager {
 
 	destroy() {
 		const vm = this._vm;
-
-		// this.cancelAll();
-		// Object.values(this.resources).forEach(r => {
-		// 	r.stopInterval();
-		// });
 		delete vm._rm;
 	}
 
@@ -52,7 +46,6 @@ export default class ResourceManager {
 			resource = this.resources[key];
 		} else {
 			resource = reactive(new Resource(this._vm, newValue));
-			// console.log('///////// ------ ', this.resources, resource);
 			this.resources[key] = resource;
 		}
 
@@ -92,8 +85,6 @@ class Resource {
 	}
 
 	update(options) {
-		// Can option be string? After the check on line 76 (in constructor)?
-		// Yes, it can because this method can get called on its own
 		if (typeof options == 'string') {
 			options = { method: options, auto: true };
 		}
@@ -183,7 +174,6 @@ class Resource {
 		this.currentParams = null;
 	}
 
-	// WHY EMPTY??
 	cancel() {}
 
 	setError(error) {

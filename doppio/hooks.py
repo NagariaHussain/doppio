@@ -40,7 +40,7 @@ app_license = "MIT"
 # ----------
 
 # application home page (will override Website Settings)
-# home_page = "login"
+home_page = "index"
 
 # website user home page (by Role)
 # role_home_page = {
@@ -54,7 +54,8 @@ app_license = "MIT"
 # website_generators = ["Web Page"]
 
 website_route_rules = [
-	{"from_route": "/vision/<path:app_path>", "to_route": "vision"},
+	{"from_route": "/app", "to_route": "/app"},
+	{"from_route": "/<path:app_path>", "to_route": "/"},
 ]
 
 # Jinja

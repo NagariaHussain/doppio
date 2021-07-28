@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
+import Courses from '../views/Courses.vue';
 
 const routes = [
 	{
@@ -7,10 +8,15 @@ const routes = [
 		name: 'Home',
 		component: Home,
 	},
+	{
+		path: '/courses',
+		name: 'Course',
+		component: Courses,
+	}
 ];
 
 const router = createRouter({
-	base: '/vision/',
+	base: '/',
 	history: createWebHistory(),
 	routes,
 });

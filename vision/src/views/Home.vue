@@ -46,7 +46,7 @@ export default {
 	resources: {
 		ping() {
 			return {
-				method: 'frappe.ping',
+				method: 'doppio.api.main.ping',
 				delay: 2
 				// auto: true,
 			};

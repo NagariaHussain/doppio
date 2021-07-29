@@ -9,11 +9,13 @@ import call from './controllers/call';
 const app = createApp(App);
 const auth = reactive(new Auth());
 
+// Plugins
 app.use(router);
 app.use(resourceManager);
 
-app.config.globalProperties.$call = call;
-app.config.globalProperties.$auth = auth;
-
+// Global Properties,
+// components can inject this
 app.provide('$auth', auth);
+app.provide('$call', call);
+
 app.mount('#app');

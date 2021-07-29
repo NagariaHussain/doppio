@@ -2,7 +2,7 @@
 	<p v-if="$resources.todos.loading">Loading todos...</p>
 	<ul v-else>
 		<li v-for="todo in todos" :key="todo.name">
-			<div class="p-3 bg-gray-800 rounded-lg my-2">
+			<div class="p-3 bg-gray-800 rounded-lg my-2 max-w-sm">
 				<div class="flex flex-row justify-between mb-3">
 					<p
 						class="

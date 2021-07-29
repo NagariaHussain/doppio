@@ -1,6 +1,10 @@
 <template>
 	<div class="bg-white shadow-lg rounded-lg p-5 m-5">
 		<h2 class="font-semibold text-lg">Hello, {{ userName }}</h2>
+
+		<h2 class="font-semibold text-lg mt-3">Your ToDos:</h2>
+		<Todos />
+
 		<button
 			@click="insertNewNumber()"
 			class="text-white bg-indigo-700 p-2 rounded mt-3 hover:bg-indigo-800"
@@ -31,6 +35,7 @@
 <script>
 import { toRefs } from 'vue';
 import useComposeTest from '../composables/useComposeTest';
+import Todos from './Todos.vue';
 
 export default {
 	props: {
@@ -38,6 +43,9 @@ export default {
 			type: String,
 			required: true,
 		},
+	},
+	components: {
+		Todos,
 	},
 	data() {
 		return {

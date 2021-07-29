@@ -27,6 +27,10 @@
 					</div>
 					<button class="bg-red-500 rounded px-2 py-2 text-white" @click="$resources.ping.reload()">Click me</button>
 				</div>
+
+				<div>
+					User is logged in: {{ this.$auth.isLoggedIn }}
+				</div>
 			</div>
 		</main>
 	</div>
@@ -37,6 +41,7 @@ import Test from '../components/Test.vue';
 
 export default {
 	name: 'Home',
+	injects: ['$auth'],
 	data() {
 		return {};
 	},

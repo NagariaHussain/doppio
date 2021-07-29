@@ -1,15 +1,6 @@
 <template>
 	<div class="bg-white shadow-lg rounded-lg p-5 m-5">
-		<h2 v-if="this.$auth.isLoggedIn">Secret for user</h2>
-		<button
-			@click="this.$auth.isLoggedIn ? this.$auth.logout() : login()"
-			class="text-white bg-indigo-700 p-2 rounded mt-3 hover:bg-indigo-800"
-		>
-			{{ this.$auth.isLoggedIn ? 'Log Out' : 'Log in' }}
-		</button>
-		<h2 class="font-semibold text-lg">
-			Hello, {{ userName }}, logged in: {{ this.$auth.isLoggedIn }}
-		</h2>
+		<h2 class="font-semibold text-lg">Hello, {{ userName }}</h2>
 		<button
 			@click="insertNewNumber()"
 			class="text-white bg-indigo-700 p-2 rounded mt-3 hover:bg-indigo-800"
@@ -42,7 +33,6 @@ import { toRefs } from 'vue';
 import useComposeTest from '../composables/useComposeTest';
 
 export default {
-	inject: ['$auth'],
 	props: {
 		userName: {
 			type: String,
@@ -52,8 +42,8 @@ export default {
 	data() {
 		return {
 			email: 'Administrator',
-			password: 'admin'
-		}
+			password: 'admin',
+		};
 	},
 	setup(props) {
 		// will remove reactivity
@@ -64,16 +54,6 @@ export default {
 			useComposeTest(userName);
 
 		return { user, numbers, secretMessage, insertNewNumber, encryptedMessage };
-	},
-	methods: {
-		async login() {
-			if (this.email && this.password) {
-				let res = await this.$auth.login(this.email, this.password);
-				if (res) {
-					console.log('logged in successfully, redirecting...');
-				}
-			}
-		},
 	},
 };
 </script>

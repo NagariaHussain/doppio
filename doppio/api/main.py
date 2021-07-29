@@ -1,5 +1,5 @@
 import frappe
 
-@frappe.whitelist(allow_guest=True)
+@frappe.whitelist()
 def ping():
     return "Ponggggg!"

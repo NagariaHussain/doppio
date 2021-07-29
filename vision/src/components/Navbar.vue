@@ -163,13 +163,15 @@
 									v-slot="{ active }"
 								>
 									<a
-										:href="item.href"
+										@click="item.action"
 										:class="[
 											active ? 'bg-gray-100' : '',
 											'block py-2 px-4 text-sm text-gray-700',
 										]"
-										>{{ item.name }}</a
+										class="cursor-pointer"
 									>
+										{{ item.name }}
+									</a>
 								</MenuItem>
 							</MenuItems>
 						</transition>
@@ -302,13 +304,8 @@ const navigation = [
 	{ name: 'My Courses', href: '/courses', current: false },
 ];
 
-const userNavigation = [
-	{ name: 'Your Profile', href: '#' },
-	{ name: 'Settings', href: '#' },
-	{ name: 'Sign out', href: '#' },
-];
-
 export default {
+	inject: ['$auth'],
 	components: {
 		Disclosure,
 		DisclosureButton,
@@ -328,9 +325,13 @@ export default {
 		return {
 			user,
 			navigation,
-			userNavigation,
 			open,
 		};
+	},
+	computed: {
+		userNavigation() {
+			return [{ name: 'Sign out', action: () => this.$auth.logout() }];
+		},
 	},
 };
 </script>

@@ -7,7 +7,7 @@
 
 		<button
 			@click="insertNewNumber()"
-			class="text-white bg-indigo-700 p-2 rounded mt-3 hover:bg-indigo-800"
+			class="text-gray-50 bg-indigo-700 p-2 rounded mt-3 hover:bg-indigo-800"
 		>
 			Add number
 		</button>

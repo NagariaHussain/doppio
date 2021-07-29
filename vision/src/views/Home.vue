@@ -12,25 +12,20 @@
 			<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
 				<div class="px-4 py-4 sm:px-0">
 					<div>
-						<p>
-							$resources.ping.loading: {{ $resources.ping.loading }}
-						</p>
-						<p>
-						loading computed: {{ isLoading }}	
-						</p>
-						<p>
-						pong computed property: {{ pong }}
-						</p>
-						<p>
-						this.$resources.ping.data: 	{{this.$resources.ping.data}}
-						</p>
+						<p>$resources.ping.loading: {{ $resources.ping.loading }}</p>
+						<p>loading computed: {{ isLoading }}</p>
+						<p>pong computed property: {{ pong }}</p>
+						<p>this.$resources.ping.data: {{ this.$resources.ping.data }}</p>
 					</div>
-					<button class="bg-red-500 rounded px-2 py-2 text-white" @click="$resources.ping.reload()">Click me</button>
+					<button
+						class="bg-red-500 rounded px-2 py-2 text-white"
+						@click="$resources.ping.reload()"
+					>
+						Click me
+					</button>
 				</div>
 
-				<div>
-					User is logged in: {{ this.$auth.isLoggedIn }}
-				</div>
+				<div>User is logged in: {{ this.$auth.isLoggedIn }}</div>
 			</div>
 		</main>
 	</div>
@@ -41,26 +36,31 @@ import Test from '../components/Test.vue';
 
 export default {
 	name: 'Home',
-	injects: ['$auth'],
+	inject: ['$auth', '$socket'],
+	mounted() {
+		this.$socket.on('hussain', (d) => {
+			console.log('hussain event', d);
+		});
+	},
 	data() {
 		return {};
 	},
 	components: {
-		Test
+		Test,
 	},
 	resources: {
 		ping() {
 			return {
 				method: 'doppio.api.main.ping',
-				delay: 2
+				delay: 2,
 				// auto: true,
 			};
-		}
+		},
 	},
 	computed: {
 		pong() {
-			console.log("Home.vue, computed", this.$resources);
-			console.log("Home.vue, computed", this.$resources.ping);
+			console.log('Home.vue, computed', this.$resources);
+			console.log('Home.vue, computed', this.$resources.ping);
 			if (!this.$resources.ping.data) {
 				return 'No data';
 			}
@@ -69,7 +69,7 @@ export default {
 		},
 		isLoading() {
 			return this.$resources.ping.loading;
-		}
+		},
 	},
 };
 </script>

@@ -5,7 +5,7 @@ from pathlib import Path
 
 APP_VUE_BOILERPLATE = """<template>
 	<div>
-		<button v-if="$auth.isLoggedIn">Logout</button>
+		<button v-if="$auth.isLoggedIn" @click="$auth.logout()">Logout</button>
 		<router-view />
 	</div>
 </template>
@@ -134,6 +134,26 @@ app.use(resourceManager);
 app.provide("$auth", auth);
 app.provide("$call", call);
 app.provide("$socket", socket);
+
+
+// Configure route gaurds
+router.beforeEach(async (to, from, next) => {
+	if (to.matched.some((record) => !record.meta.isLoginPage)) {
+		// this route requires auth, check if logged in
+		// if not, redirect to login page.
+		if (!auth.isLoggedIn) {
+			next({ name: 'Login', query: { route: to.path } });
+		} else {
+			next();
+		}
+	} else {
+		if (auth.isLoggedIn) {
+			next({ name: 'Home' });
+		} else {
+			next();
+		}
+	}
+});
 
 app.mount("#app");
 """

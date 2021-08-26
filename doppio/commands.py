@@ -3,8 +3,77 @@ import subprocess
 
 from pathlib import Path
 
-VITE_CONFIG_BOILERPLATE = """
-import path from 'path';
+APP_VUE_BOILERPLATE = """<template>
+	<div>
+		<button v-if="$auth.isLoggedIn">Logout</button>
+		<router-view />
+	</div>
+</template>
+
+
+<script>
+export default {
+	inject: ['$auth']
+};
+</script>
+"""
+
+HOME_VUE_BOILERPLATE = """<template>
+	<h1>Home Page</h1>
+	<button>Ping</button>
+</template>
+"""
+
+LOGIN_VUE_BOILERPLATE = """<template>
+  <div class="min-h-screen bg-white flex">
+    <div class="mx-auto w-full max-w-sm lg:w-96">
+      <form @submit.prevent="login" class="space-y-6">
+        <label for="email"> Username: </label>
+        <input type="text" v-model="email" />
+        <br />
+        <label for="password"> Password: </label>
+        <input type="password" v-model="password" />
+
+        <button
+          class="bg-blue-500 block text-white p-2 hover:bg-blue-700"
+          type="submit"
+        >
+          Sign in
+        </button>
+      </form>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data() {
+    return {
+      email: null,
+      password: null,
+    };
+  },
+  inject: ["$auth"],
+  async mounted() {
+    if (this.$route?.query?.route) {
+      this.redirect_route = this.$route.query.route;
+      this.$router.replace({ query: null });
+    }
+  },
+  methods: {
+    async login() {
+      if (this.email && this.password) {
+        let res = await this.$auth.login(this.email, this.password);
+        if (res) {
+          this.$router.push({ name: "Home" });
+        }
+      }
+    },
+  },
+};
+</script>
+"""
+
+VITE_CONFIG_BOILERPLATE = """import path from 'path';
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import proxyOptions from './proxyOptions';
@@ -142,8 +211,6 @@ def generate_spa(name, app):
 		click.echo("src/main.js not found!")
 		return
 
-	setup_router(spa_path, name)
-
 	# Setup proxy options file
 	proxy_options_file: Path = spa_path / "proxyOptions.js"
 	proxy_options_file.touch()
@@ -158,6 +225,10 @@ def generate_spa(name, app):
 		boilerplate = boilerplate.replace("{{name}}", name)
 		f.write(boilerplate)
 
+	setup_router(spa_path, name)
+	setup_vue_files(spa_path)
+
+	# Start the dev server
 	subprocess.run(["yarn", "dev"], cwd=spa_path)
 
 
@@ -179,6 +250,31 @@ def setup_router(spa_path, spa_name):
 	auth_routes_file.touch()
 	with auth_routes_file.open("w") as f:
 		f.write(AUTH_ROUTES_BOILERPLATE)
+
+
+def setup_vue_files(spa_path: Path):
+	app_vue = spa_path / "src/App.vue"
+
+	with app_vue.open("w") as f:
+		f.write(APP_VUE_BOILERPLATE)
+
+	views_dir: Path = spa_path / "src/views"
+
+	if not views_dir.exists():
+		views_dir.mkdir()
+
+	home_vue = views_dir / "Home.vue"
+	login_vue = views_dir / "Login.vue"
+
+	if not home_vue.exists():
+		home_vue.touch()
+	with home_vue.open("w") as f:
+		f.write(HOME_VUE_BOILERPLATE)
+
+	if not login_vue.exists():
+		login_vue.touch()
+	with login_vue.open("w") as f:
+		f.write(LOGIN_VUE_BOILERPLATE)
 
 
 commands = [generate_spa]

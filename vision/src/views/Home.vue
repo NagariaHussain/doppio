@@ -26,6 +26,7 @@
 				</div>
 
 				<div>User is logged in: {{ this.$auth.isLoggedIn }}</div>
+				<button>Ping</button>
 			</div>
 		</main>
 	</div>

@@ -13,7 +13,7 @@ import proxyOptions from './proxyOptions';
 export default defineConfig({
 	plugins: [vue()],
 	server: {
-		port: 3000,
+		port: 8080,
 		proxy: proxyOptions
 	},
 	resolve: {
@@ -158,10 +158,12 @@ def generate_spa(name, app):
 		boilerplate = boilerplate.replace("{{name}}", name)
 		f.write(boilerplate)
 
+	subprocess.run(["yarn", "dev"], cwd=spa_path)
+
 
 def setup_router(spa_path, spa_name):
 	# Setup vue router
-	router_dir_path: Path = spa_path / "router"
+	router_dir_path: Path = spa_path / "src/router"
 
 	# Create router directory
 	router_dir_path.mkdir()

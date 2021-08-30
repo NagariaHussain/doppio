@@ -18,14 +18,11 @@ export default class Auth {
 	}
 
 	async login(email, password) {
-		// localStorage.removeItem('current_team');
 		let res = await call('login', {
 			usr: email,
 			pwd: password,
 		});
 		if (res) {
-			// await this.$account.fetchAccount();
-			// localStorage.setItem('current_team', this.$account.team.name);
 			this.isLoggedIn = true;
 			return res;
 		}
@@ -33,16 +30,13 @@ export default class Auth {
 	}
 
 	async logout() {
-		// localStorage.removeItem('current_team');
-		this.isLoggedIn = false;
 		await call('logout');
+		this.isLoggedIn = false;
 		window.location.reload();
 	}
 
 	async resetPassword(email) {
 		console.log('resetting password');
-		// return await call('press.api.account.send_reset_password_email', {
-		// 	email
-		// });
+		// Implement if you want
 	}
 }

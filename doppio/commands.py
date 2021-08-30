@@ -199,7 +199,10 @@ AUTH_ROUTES_BOILERPLATE = """export default [
 @click.command("add-spa")
 @click.option("--name", default="dashboard", prompt="Dashboard Name")
 @click.option("--app")
-def generate_spa(name, app):
+@click.option(
+	"--tailwindcss", default=False, is_flag=True, help="Configure tailwindCSS"
+)
+def generate_spa(name, app, tailwindcss):
 	if not app:
 		click.echo("Please provide an app with --app")
 		return
@@ -226,7 +229,13 @@ def generate_spa(name, app):
 
 	if main_js.exists():
 		with main_js.open("w") as f:
-			f.write(MAIN_JS_BOILERPLATE)
+			boilerplate = MAIN_JS_BOILERPLATE
+
+			# Add css import
+			if tailwindcss:
+				boilerplate = "import './index.css';\n" + boilerplate
+
+			f.write(boilerplate)
 	else:
 		click.echo("src/main.js not found!")
 		return
@@ -247,6 +256,9 @@ def generate_spa(name, app):
 
 	setup_router(spa_path, name)
 	setup_vue_files(spa_path)
+
+	if tailwindcss:
+		setup_tailwind_css(spa_path)
 
 	# Start the dev server
 	subprocess.run(["yarn", "dev"], cwd=spa_path)
@@ -295,6 +307,50 @@ def setup_vue_files(spa_path: Path):
 		login_vue.touch()
 	with login_vue.open("w") as f:
 		f.write(LOGIN_VUE_BOILERPLATE)
+
+
+def setup_tailwind_css(spa_path: Path):
+	# TODO: Convert to yarn command
+	# npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+	subprocess.run(
+		[
+			"npm",
+			"install",
+			"-D",
+			"tailwindcss@latest",
+			"postcss@latest",
+			"autoprefixer@latest",
+		],
+		cwd=spa_path,
+	)
+
+	# npx tailwindcss init -p
+	subprocess.run(["npx", "tailwindcss", "init", "-p"], cwd=spa_path)
+
+	# Create an index.css file
+	index_css_path: Path = spa_path / "src/index.css"
+	if not index_css_path.exists():
+		index_css_path.touch()
+
+	# Add boilerplate code
+	INDEX_CSS_BOILERPLATE = """@tailwind base;
+@tailwind components;
+@tailwind utilities;
+"""
+
+	with index_css_path.open("w") as f:
+		f.write(INDEX_CSS_BOILERPLATE)
+
+
+def create_file(file_path: Path, content: str = None):
+	# Create the file if not exists
+	if not file_path.exists():
+		file_path.touch()
+
+	# Write the contents (if any)
+	if content:
+		with file_path.open("w") as f:
+			f.write(content)
 
 
 commands = [generate_spa]

@@ -1,3 +1,13 @@
+# TODO: Create a class `SPAGenerator` that
+# does the heavy lifting and import it here
+
+# TODO: Maybe make the commands.py -> commands/__init__.py
+
+# TODO: Better way to handle templates, maybe store in a seperate file
+# containing a dict of this
+
+# TODO: A seprate method to render those templates with context (if any)?
+
 import click
 import subprocess
 

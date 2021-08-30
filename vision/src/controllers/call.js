@@ -11,12 +11,6 @@ export default async function call(method, args) {
 		'X-Frappe-Site-Name': window.location.hostname
 	};
 
-    // TODO: Could be used later to send auth headers
-	// let team = localStorage.getItem('current_team') || null;
-	// if (team) {
-	// 	headers['X-Press-Team'] = team;
-	// }
-
 	if (window.csrf_token && window.csrf_token !== '{{ csrf_token }}') {
 		headers['X-Frappe-CSRF-Token'] = window.csrf_token;
 	}

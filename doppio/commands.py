@@ -242,9 +242,7 @@ def generate_spa(name, app, tailwindcss):
 
 	# Setup proxy options file
 	proxy_options_file: Path = spa_path / "proxyOptions.js"
-	proxy_options_file.touch()
-	with proxy_options_file.open("w") as f:
-		f.write(PROXY_OPTIONS_BOILERPLATE)
+	create_file(proxy_options_file, PROXY_OPTIONS_BOILERPLATE)
 
 	vite_config_file: Path = spa_path / "vite.config.js"
 	if not vite_config_file.exists():
@@ -273,40 +271,25 @@ def setup_router(spa_path, spa_name):
 
 	# Create files
 	router_index_file = router_dir_path / "index.js"
-	router_index_file.touch()
-	with router_index_file.open("w") as f:
-		boilerplate = ROUTER_INDEX_BOILERPLATE.replace("{{name}}", spa_name)
-		f.write(boilerplate)
+	create_file(router_index_file, ROUTER_INDEX_BOILERPLATE.replace("{{name}}", spa_name))
 
 	auth_routes_file = router_dir_path / "auth.js"
-	auth_routes_file.touch()
-	with auth_routes_file.open("w") as f:
-		f.write(AUTH_ROUTES_BOILERPLATE)
+	create_file(auth_routes_file, AUTH_ROUTES_BOILERPLATE)
 
 
 def setup_vue_files(spa_path: Path):
 	app_vue = spa_path / "src/App.vue"
-
-	with app_vue.open("w") as f:
-		f.write(APP_VUE_BOILERPLATE)
+	create_file(app_vue, APP_VUE_BOILERPLATE)
 
 	views_dir: Path = spa_path / "src/views"
-
 	if not views_dir.exists():
 		views_dir.mkdir()
 
 	home_vue = views_dir / "Home.vue"
 	login_vue = views_dir / "Login.vue"
 
-	if not home_vue.exists():
-		home_vue.touch()
-	with home_vue.open("w") as f:
-		f.write(HOME_VUE_BOILERPLATE)
-
-	if not login_vue.exists():
-		login_vue.touch()
-	with login_vue.open("w") as f:
-		f.write(LOGIN_VUE_BOILERPLATE)
+	create_file(home_vue, HOME_VUE_BOILERPLATE)
+	create_file(login_vue, LOGIN_VUE_BOILERPLATE)
 
 
 def setup_tailwind_css(spa_path: Path):
@@ -329,8 +312,6 @@ def setup_tailwind_css(spa_path: Path):
 
 	# Create an index.css file
 	index_css_path: Path = spa_path / "src/index.css"
-	if not index_css_path.exists():
-		index_css_path.touch()
 
 	# Add boilerplate code
 	INDEX_CSS_BOILERPLATE = """@tailwind base;
@@ -338,8 +319,7 @@ def setup_tailwind_css(spa_path: Path):
 @tailwind utilities;
 """
 
-	with index_css_path.open("w") as f:
-		f.write(INDEX_CSS_BOILERPLATE)
+	create_file(index_css_path, INDEX_CSS_BOILERPLATE)
 
 
 def create_file(file_path: Path, content: str = None):

@@ -1,17 +1,17 @@
-# TODO: Create a class `SPAGenerator` that
-# does the heavy lifting and import it here
-
-# TODO: Maybe make the commands.py -> commands/__init__.py
-
 # TODO: Better way to handle templates, maybe store in a seperate file
 # containing a dict of this
 
 # TODO: A seprate method to render those templates with context (if any)?
 
+import re
 import click
 import subprocess
 
 from pathlib import Path
+
+# This is how the SPAGenerator API should be
+# generator = SPAGenerator(name: str, app: str, tailwindcss: bool, templates: Dict)
+# genrator.generate_spa()
 
 APP_VUE_BOILERPLATE = """<template>
 	<div>
@@ -264,6 +264,7 @@ def generate_spa(name, app, tailwindcss):
 
 	setup_router(spa_path, name)
 	setup_vue_files(spa_path)
+	add_routing_rule_to_hooks(app, name)
 
 	if tailwindcss:
 		setup_tailwind_css(spa_path)
@@ -341,6 +342,29 @@ def create_file(file_path: Path, content: str = None):
 	if content:
 		with file_path.open("w") as f:
 			f.write(content)
+
+
+def add_routing_rule_to_hooks(app: str, spa_name: str):
+	hooks_py = Path(f"../apps/{app}/{app}") / "hooks.py"
+	hooks = ""
+	with hooks_py.open("r") as f:
+		hooks = f.read()
+
+	pattern = re.compile(r"website_route_rules\s?=\s?\[(.+)\]")
+
+	rule = (
+		"{" + f"'from_route': '/{spa_name}/<path:app_path>', 'to_route': '{spa_name}'" + "}"
+	)
+
+	rules = pattern.sub(r"website_route_rules = [{rule}, \1]", hooks)
+
+	# If rule is not already defined
+	if not pattern.search(hooks):
+		rules = hooks + "\nwebsite_route_rules = [{rule},]"
+
+	updates_hooks = rules.replace("{rule}", rule)
+	with hooks_py.open("w") as f:
+		f.write(updates_hooks)
 
 
 commands = [generate_spa]

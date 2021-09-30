@@ -49,7 +49,20 @@ This will start a development server at port `8080` by default (any other port i
 
 ## Building for Production
 
-soon.
+The below command builds the application and places it in the `www` directory of your frappe app:
+
+```bash
+$ cd <your-spa-name> && yarn build
+```
+
+Check the `package.json` file inside the Vue application directory to learn more about the dev server / build steps.
+
+If you already have a package.json file with scripts in your app's root directory, you can add the following two scripts to your app's package.json file in order for the `bench build` command to work as expected:
+
+```json
+"dev": "cd <your-spa-folder> && yarn dev",
+"build": "cd <your-spa-folder> && yarn build"
+```
 
 ### License
 

@@ -188,21 +188,21 @@ class SPAGenerator:
 			json.dump(data, f, indent=2)
 
 		# Might restrict some users
-		# # Update app's package.json
-		# app_package_json_path: Path = self.app_path / "package.json"
+		# Update app's package.json
+		app_package_json_path: Path = self.app_path / "package.json"
 
-		# if not app_package_json_path.exists():
-		# 	subprocess.run(["npm", "init", "--yes"], cwd=self.app_path)
+		if not app_package_json_path.exists():
+			subprocess.run(["npm", "init", "--yes"], cwd=self.app_path)
 
-		# data = {}
-		# with app_package_json_path.open("r") as f:
-		# 	data = json.load(f)
+			data = {}
+			with app_package_json_path.open("r") as f:
+				data = json.load(f)
 
-		# data["scripts"]["dev"] = f"cd {self.spa_name} && yarn dev"
-		# data["scripts"]["build"] = f"cd {self.spa_name} && yarn build"
+			data["scripts"]["dev"] = f"cd {self.spa_name} && yarn dev"
+			data["scripts"]["build"] = f"cd {self.spa_name} && yarn build"
 
-		# with app_package_json_path.open("w") as f:
-		# 	json.dump(data, f, indent=2)
+			with app_package_json_path.open("w") as f:
+				json.dump(data, f, indent=2)
 
 	def create_www_directory(self):
 		www_dir_path: Path = self.app_path / f"{self.app}/www"

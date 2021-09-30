@@ -1,4 +1,5 @@
 import re
+import json
 import click
 import subprocess
 
@@ -24,6 +25,8 @@ class SPAGenerator:
 		self.setup_proxy_options()
 		self.setup_vue_router()
 		self.create_vue_files()
+		self.update_package_json()
+		self.create_www_directory()
 
 		if self.add_tailwindcss:
 			self.setup_tailwindcss()
@@ -160,3 +163,49 @@ class SPAGenerator:
 		updates_hooks = rules.replace("{rule}", rule)
 		with hooks_py.open("w") as f:
 			f.write(updates_hooks)
+
+	def update_package_json(self):
+		package_json_path: Path = self.spa_path / "package.json"
+
+		if not package_json_path.exists():
+			print("package.json not found. Please manulally update the build command.")
+			return
+
+		data = {}
+		with package_json_path.open("r") as f:
+			data = json.load(f)
+
+		data["scripts"]["build"] = (
+			f"vite build --base=/assets/{self.app}/{self.spa_name}/ && yarn copy-html-entry"
+		)
+
+		data["scripts"]["copy-html-entry"] = (
+			f"cp ../{self.app}/public/{self.spa_name}/index.html"
+			f" ../{self.app}/www/{self.spa_name}.html"
+		)
+
+		with package_json_path.open("w") as f:
+			json.dump(data, f, indent=2)
+
+		# Might restrict some users
+		# # Update app's package.json
+		# app_package_json_path: Path = self.app_path / "package.json"
+
+		# if not app_package_json_path.exists():
+		# 	subprocess.run(["npm", "init", "--yes"], cwd=self.app_path)
+
+		# data = {}
+		# with app_package_json_path.open("r") as f:
+		# 	data = json.load(f)
+
+		# data["scripts"]["dev"] = f"cd {self.spa_name} && yarn dev"
+		# data["scripts"]["build"] = f"cd {self.spa_name} && yarn build"
+
+		# with app_package_json_path.open("w") as f:
+		# 	json.dump(data, f, indent=2)
+
+	def create_www_directory(self):
+		www_dir_path: Path = self.app_path / f"{self.app}/www"
+
+		if not www_dir_path.exists():
+			www_dir_path.mkdir()

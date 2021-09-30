@@ -1,5 +1,7 @@
+// Authors: Faris Ansari <faris@frappe.io> & Hussain Nagaria <hussain@frappe.io>
+
 import ResourceManager from './ResourceManager';
-import { toRef, toRefs, reactive, ref } from 'vue';
+import { reactive } from 'vue';
 
 let plugin = {
 	beforeCreate() {

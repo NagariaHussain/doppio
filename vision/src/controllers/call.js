@@ -1,3 +1,5 @@
+// Author: Gavin D'souza <gavin@frappe.io>
+
 import router from '@/router';
 
 export default async function call(method, args) {

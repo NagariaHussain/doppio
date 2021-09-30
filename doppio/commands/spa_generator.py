@@ -187,7 +187,6 @@ class SPAGenerator:
 		with package_json_path.open("w") as f:
 			json.dump(data, f, indent=2)
 
-		# Might restrict some users
 		# Update app's package.json
 		app_package_json_path: Path = self.app_path / "package.json"
 

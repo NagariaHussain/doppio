@@ -1,3 +1,5 @@
+// Authors: Faris Ansari <faris@frappe.io>
+
 import io from 'socket.io-client/dist/socket.io.slim';
 
 let host = window.location.hostname;

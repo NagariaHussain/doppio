@@ -3,12 +3,7 @@
   "version": "0.0.1",
   "description": "A dream.",
   "main": "index.js",
-  "scripts": {
-    "dev": "cd vision && yarn dev",
-    "build": "NODE_ENV=production yarn run build-all",
-    "build-all": "yarn run build-app",
-    "build-app": "cd vision && yarn build"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/NagariaHussain/doppio.git"
@@ -24,5 +19,8 @@
   "homepage": "https://github.com/NagariaHussain/doppio#readme",
   "devDependencies": {
     "vite": "^2.4.2"
+  },
+  "dependencies": {
+    "socket.io-client": "^2.4.0"
   }
 }

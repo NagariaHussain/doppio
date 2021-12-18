@@ -14,9 +14,27 @@ export default {
 """
 
 HOME_VUE_BOILERPLATE = """<template>
-	<h1>Home Page</h1>
-	<button>Ping</button>
+  <div>
+    <h1>Home Page</h1>
+    <!-- Fetch the resource on click -->
+    <button @click="$resources.ping.fetch()">Ping</button>
+  </div>
 </template>
+
+<script>
+export default {
+  resources: {
+    ping() {
+      return {
+        method: "frappe.ping", // Method to call on backend
+        onSuccess(d) {
+          alert(d);
+        },
+      };
+    },
+  },
+};
+</script>
 """
 
 LOGIN_VUE_BOILERPLATE = """<template>

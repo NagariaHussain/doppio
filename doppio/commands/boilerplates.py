@@ -89,6 +89,9 @@ export default defineConfig({
 		outDir: '../{{app}}/public/{{name}}',
 		emptyOutDir: true,
 		target: 'es2015',
+		rollupOptions: {
+            external: ["vue"],
+        },
 	},
 });
 """

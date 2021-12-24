@@ -27,6 +27,7 @@ class SPAGenerator:
 		self.create_vue_files()
 		self.update_package_json()
 		self.create_www_directory()
+		self.add_csrf_to_html()
 
 		if self.add_tailwindcss:
 			self.setup_tailwindcss()
@@ -208,3 +209,16 @@ class SPAGenerator:
 
 		if not www_dir_path.exists():
 			www_dir_path.mkdir()
+
+	def add_csrf_to_html(self):
+		index_html_file_path = self.spa_path / "index.html"
+		with index_html_file_path.open("r") as f:
+			current_html = f.read()
+
+		# For attaching CSRF Token
+		updated_html = current_html.replace(
+			"</div>", "</div>\n\t\t<script>window.csrf_token = '{{ csrf_token }}';</script>"
+		)
+
+		with index_html_file_path.open("w") as f:
+			f.write(updated_html)

@@ -4,8 +4,8 @@ import click
 import subprocess
 
 from pathlib import Path
-from .utils import create_file
 from .boilerplates import *
+from .utils import create_file
 
 
 class SPAGenerator:

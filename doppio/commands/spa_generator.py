@@ -9,8 +9,9 @@ from .utils import create_file
 
 
 class SPAGenerator:
-	def __init__(self, spa_name, app, add_tailwindcss):
+	def __init__(self, framework, spa_name, app, add_tailwindcss):
 		"""Initialize a new SPAGenerator instance"""
+		self.framework = framework
 		self.app = app
 		self.app_path = Path("../apps") / app
 		self.spa_name = spa_name
@@ -19,12 +20,21 @@ class SPAGenerator:
 
 	def generate_spa(self):
 		click.echo("Generating spa...")
+		if self.framework == "vue":
+			self.initialize_vue_vite_project()
+			self.link_controller_files()
+			self.setup_proxy_options()
+			self.setup_vue_vite_config()
+			self.setup_vue_router()
+			self.create_vue_files()
 
-		self.initialize_vue_vite_project()
-		self.link_controller_files()
-		self.setup_proxy_options()
-		self.setup_vue_router()
-		self.create_vue_files()
+		elif self.framework == "react":
+			self.initialize_react_vite_project()
+			self.setup_proxy_options()
+			self.setup_react_vite_config()
+			self.create_react_files()
+
+		#Common to all frameworks
 		self.update_package_json()
 		self.create_www_directory()
 		self.add_csrf_to_html()
@@ -133,11 +143,12 @@ class SPAGenerator:
 		proxy_options_file: Path = self.spa_path / "proxyOptions.js"
 		create_file(proxy_options_file, PROXY_OPTIONS_BOILERPLATE)
 
+	def setup_vue_vite_config(self):
 		vite_config_file: Path = self.spa_path / "vite.config.js"
 		if not vite_config_file.exists():
 			vite_config_file.touch()
 		with vite_config_file.open("w") as f:
-			boilerplate = VITE_CONFIG_BOILERPLATE.replace("{{app}}", self.app)
+			boilerplate = VUE_VITE_CONFIG_BOILERPLATE.replace("{{app}}", self.app)
 			boilerplate = boilerplate.replace("{{name}}", self.spa_name)
 			f.write(boilerplate)
 
@@ -169,7 +180,7 @@ class SPAGenerator:
 		package_json_path: Path = self.spa_path / "package.json"
 
 		if not package_json_path.exists():
-			print("package.json not found. Please manulally update the build command.")
+			print("package.json not found. Please manually update the build command.")
 			return
 
 		data = {}
@@ -222,3 +233,30 @@ class SPAGenerator:
 
 		with index_html_file_path.open("w") as f:
 			f.write(updated_html)
+		
+	def initialize_react_vite_project(self):
+		# Run "yarn create vite {name} --template react"
+		print("Scaffolding React project...")
+		subprocess.run(
+			["yarn", "create", "vite", self.spa_name, "--template", "react"], cwd=self.app_path
+		)
+
+		# Install router and other npm packages
+		# yarn add frappe-react-sdk socket.io-client@2.4.0
+		print("Installing dependencies...")
+		subprocess.run(
+			["yarn", "add", "frappe-react-sdk", "socket.io-client@^2.4.0"], cwd=self.spa_path
+		)
+	
+	def setup_react_vite_config(self):
+		vite_config_file: Path = self.spa_path / "vite.config.js"
+		if not vite_config_file.exists():
+			vite_config_file.touch()
+		with vite_config_file.open("w") as f:
+			boilerplate = REACT_VITE_CONFIG_BOILERPLATE.replace("{{app}}", self.app)
+			boilerplate = boilerplate.replace("{{name}}", self.spa_name)
+			f.write(boilerplate)
+	
+	def create_react_files(self):
+		app_react = self.spa_path / "src/App.jsx"
+		create_file(app_react, APP_REACT_BOILERPLATE)

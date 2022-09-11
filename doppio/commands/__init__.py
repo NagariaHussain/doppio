@@ -3,7 +3,7 @@ from .spa_generator import SPAGenerator
 
 @click.command("add-spa")
 @click.option("--name", default="dashboard", prompt="Dashboard Name")
-@click.option("--app")
+@click.option("--app", prompt='App Name')
 @click.option('--framework', type=click.Choice(['vue', 'react']), default='vue', prompt='Which framework do you want to use?', help='The framework to use for the SPA')
 @click.option(
 	"--tailwindcss", default=False, is_flag=True, help="Configure tailwindCSS"

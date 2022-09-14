@@ -114,7 +114,7 @@ export default defineConfig({
 PROXY_OPTIONS_BOILERPLATE = """const common_site_config = require('../../../sites/common_site_config.json');
 const { webserver_port } = common_site_config;
 
-module.exports = {
+export default {
 	'^/(app|api|assets|files)': {
 		target: `http://localhost:${webserver_port}`,
 		ws: true,

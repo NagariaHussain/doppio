@@ -82,4 +82,4 @@ If you already have a package.json file with scripts in your app's root director
 
 ### License
 
-[MIT](./LICENSE.txt)
+[MIT](./license.txt)

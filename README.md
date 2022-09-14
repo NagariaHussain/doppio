@@ -7,7 +7,7 @@ A Frappe App to setup and manage single page applications (using Vue 3 or React)
 In your bench directory:
 
 ```bash
-$ bench get-app https://github.com/NagariaHussain/doppio
+bench get-app https://github.com/NagariaHussain/doppio
 ```
 
 This will install the `Doppio` frappe app on your bench and enable some custom bench CLI commands
@@ -18,7 +18,7 @@ that will ease the process of attaching a SPA to your Frappe Application.
 Setting up a new Single Page Application
 
 ```bash
-$ bench add-spa --app <app-name> [--tailwindcss]
+bench add-spa --app <app-name> [--tailwindcss]
 ```
 
 You will be prompted to enter a name for your single page application, this will be the name of the directory and the URI path at which the application will be served. For instance, if you enter `dashboard` (default), then a folder named `dashboard` will be created inside your app's root directory and the application will be served at `/dashboard`.
@@ -30,6 +30,7 @@ You can optionally pass the `--tailwindcss` flag which will also setup tailwindC
 The above command will do the following things:
 
 ### For Vue 3
+
 1. Scaffold a new Vue 3 starter application (using [Vite](https://vitejs.dev/))
 
 2. Add and configure Vue router
@@ -43,6 +44,7 @@ The above command will do the following things:
 6. Update the `website_route_rules` hook (in `hooks.py` of your app) to handle the routing of this SPA.
 
 ### For React
+
 1. Scaffold a new React starter application (using [Vite](https://vitejs.dev/))
 
 2. Add and configure [frappe-react-sdk](https://github.com/nikkothari22/frappe-react-sdk) to make the connection with Frappe backend a breeze!
@@ -56,7 +58,7 @@ The above command will do the following things:
 Once the setup is complete, you can `cd` into the SPA directory of your app (e.g. `dashboard`) and run:
 
 ```bash
-$ yarn dev
+yarn dev
 ```
 
 This will start a development server at port `8080` by default (any other port if this port's already in use). You can view the running application at: `<site>:8080`.
@@ -66,7 +68,7 @@ This will start a development server at port `8080` by default (any other port i
 The below command builds the application and places it in the `www` directory of your frappe app:
 
 ```bash
-$ cd <your-spa-name> && yarn build
+cd <your-spa-name> && yarn build
 ```
 
 Check the `package.json` file inside the Vue application directory to learn more about the dev server / build steps.
@@ -80,4 +82,4 @@ If you already have a package.json file with scripts in your app's root director
 
 ### License
 
-Do whatever you want with the code. If you can sell it, go ahead and make some money!
+[MIT](./LICENSE.txt)

@@ -18,6 +18,13 @@ class SPAGenerator:
 		self.spa_path: Path = self.app_path / self.spa_name
 		self.add_tailwindcss = add_tailwindcss
 
+		self.validate_spa_name()
+
+	def validate_spa_name(self):
+		if self.spa_name == self.app:
+			click.echo("Dashboard name must not be same as app name", err=True, color=True)
+			exit(1)
+
 	def generate_spa(self):
 		click.echo("Generating spa...")
 		if self.framework == "vue":

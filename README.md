@@ -25,6 +25,8 @@ You will be prompted to enter a name for your single page application, this will
 
 You will then be asked to select the framework you prefer: React or Vue.
 
+You can also select whether you want to use Typescript or Javascript.
+
 You can optionally pass the `--tailwindcss` flag which will also setup tailwindCSS (who doesn't like tailwind!) along with the Vue 3/React application.
 
 The above command will do the following things:

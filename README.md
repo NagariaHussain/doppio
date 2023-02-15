@@ -18,7 +18,7 @@ that will ease the process of attaching a SPA to your Frappe Application.
 Setting up a new Single Page Application
 
 ```bash
-bench add-spa --app <app-name> [--tailwindcss]
+bench add-spa --app <app-name> [--tailwindcss] [--typescript]
 ```
 
 You will be prompted to enter a name for your single page application, this will be the name of the directory and the URI path at which the application will be served. For instance, if you enter `dashboard` (default), then a folder named `dashboard` will be created inside your app's root directory and the application will be served at `/dashboard`.

@@ -9,7 +9,7 @@ from .utils import create_file
 
 
 class SPAGenerator:
-	def __init__(self, framework, spa_name, app, add_tailwindcss):
+	def __init__(self, framework, spa_name, app, add_tailwindcss, typescript):
 		"""Initialize a new SPAGenerator instance"""
 		self.framework = framework
 		self.app = app
@@ -17,6 +17,7 @@ class SPAGenerator:
 		self.spa_name = spa_name
 		self.spa_path: Path = self.app_path / self.spa_name
 		self.add_tailwindcss = add_tailwindcss
+		self.use_typescript = typescript
 
 		self.validate_spa_name()
 
@@ -116,9 +117,14 @@ class SPAGenerator:
 	def initialize_vue_vite_project(self):
 		# Run "yarn create vite {name} --template vue"
 		print("Scafolding vue project...")
-		subprocess.run(
-			["yarn", "create", "vite", self.spa_name, "--template", "vue"], cwd=self.app_path
-		)
+		if self.use_typescript:
+			subprocess.run(
+				["yarn", "create", "vite", self.spa_name, "--template", "vue-ts"], cwd=self.app_path
+			)
+		else:
+			subprocess.run(
+				["yarn", "create", "vite", self.spa_name, "--template", "vue"], cwd=self.app_path
+			)
 
 		# Install router and other npm packages
 		# yarn add vue-router@4 socket.io-client@2.4.0
@@ -128,9 +134,9 @@ class SPAGenerator:
 		)
 
 	def link_controller_files(self):
-		# Link controller files in main.js
+		# Link controller files in main.js/main.ts
 		print("Linking controller files...")
-		main_js: Path = self.app_path / f"{self.spa_name}/src/main.js"
+		main_js: Path = self.app_path / (f"{self.spa_name}/src/main.ts" if self.use_typescript else f"{self.spa_name}/src/main.js")
 
 		if main_js.exists():
 			with main_js.open("w") as f:
@@ -151,7 +157,7 @@ class SPAGenerator:
 		create_file(proxy_options_file, PROXY_OPTIONS_BOILERPLATE)
 
 	def setup_vue_vite_config(self):
-		vite_config_file: Path = self.spa_path / "vite.config.js"
+		vite_config_file: Path = self.spa_path / ("vite.config.ts" if self.use_typescript else "vite.config.js")
 		if not vite_config_file.exists():
 			vite_config_file.touch()
 		with vite_config_file.open("w") as f:
@@ -244,9 +250,14 @@ class SPAGenerator:
 	def initialize_react_vite_project(self):
 		# Run "yarn create vite {name} --template react"
 		print("Scaffolding React project...")
-		subprocess.run(
-			["yarn", "create", "vite", self.spa_name, "--template", "react"], cwd=self.app_path
-		)
+		if self.use_typescript:
+			subprocess.run(
+				["yarn", "create", "vite", self.spa_name, "--template", "react-ts"], cwd=self.app_path
+			)
+		else:
+			subprocess.run(
+				["yarn", "create", "vite", self.spa_name, "--template", "react"], cwd=self.app_path
+			)
 
 		# Install router and other npm packages
 		# yarn add frappe-react-sdk socket.io-client@2.4.0
@@ -256,7 +267,7 @@ class SPAGenerator:
 		)
 
 	def setup_react_vite_config(self):
-		vite_config_file: Path = self.spa_path / "vite.config.js"
+		vite_config_file: Path = self.spa_path / ("vite.config.ts" if self.use_typescript else "vite.config.js")
 		if not vite_config_file.exists():
 			vite_config_file.touch()
 		with vite_config_file.open("w") as f:
@@ -265,5 +276,5 @@ class SPAGenerator:
 			f.write(boilerplate)
 
 	def create_react_files(self):
-		app_react = self.spa_path / "src/App.jsx"
+		app_react = self.spa_path / ("src/App.tsx" if self.use_typescript else "src/App.jsx")
 		create_file(app_react, APP_REACT_BOILERPLATE)

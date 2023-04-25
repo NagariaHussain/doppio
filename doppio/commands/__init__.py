@@ -47,9 +47,8 @@ def add_frappe_ui_starter(name, app):
 	)
 	subprocess.run(["yarn"], cwd=Path("../apps", app, name))
 
-	click.echo("✨ Done")
-	click.echo(f"🖥️ You can start the dev server by running 'yarn dev' in apps/{app}/{name}")
-	click.echo("📄 Docs: https://frappeui.com")
+	click.echo(f"🖥️  You can start the dev server by running 'yarn dev' in apps/{app}/{name}")
+	click.echo("📄  Docs: https://frappeui.com")
 
 
 commands = [generate_spa, add_frappe_ui_starter]

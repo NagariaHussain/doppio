@@ -1,6 +1,7 @@
 import click
 import subprocess
 from .spa_generator import SPAGenerator
+from .utils import add_build_command_to_package_json, add_routing_rule_to_hooks
 
 
 @click.command("add-spa")
@@ -47,7 +48,12 @@ def add_frappe_ui_starter(name, app):
 	)
 	subprocess.run(["yarn"], cwd=Path("../apps", app, name))
 
-	click.echo(f"🖥️  You can start the dev server by running 'yarn dev' in apps/{app}/{name}")
+	add_build_command_to_package_json(app, name)
+	add_routing_rule_to_hooks(app, name)
+
+	click.echo(
+		f"🖥️  You can start the dev server by running 'yarn dev' in apps/{app}/{name}"
+	)
 	click.echo("📄  Docs: https://frappeui.com")
 
 

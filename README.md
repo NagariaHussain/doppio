@@ -1,5 +1,7 @@
 ## Doppio
 
+![Unit Tests](https://github.com/github/docs/actions/workflows/python-app.yml/badge.svg
+
 A Frappe App to setup and manage single page applications (using Vue 3 or React) on any other custom Frappe App.
 
 ### Installation

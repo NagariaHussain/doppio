@@ -87,6 +87,11 @@ class SPAGenerator:
 		create_file(index_css_path, INDEX_CSS_BOILERPLATE)
 
 		# Populate content property in tailwind config file
+		# the extension of config can be .js or .ts, so we need to check for both
+		tailwind_config_path: Path = self.spa_path / "tailwind.config.js"
+		if not tailwind_config_path.exists():
+			tailwind_config_path = self.spa_path / "tailwind.config.ts"
+
 		tailwind_config_path: Path = self.spa_path / "tailwind.config.js"
 		tailwind_config = tailwind_config_path.read_text()
 		tailwind_config = tailwind_config.replace(

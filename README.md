@@ -1,10 +1,10 @@
-## Doppio
+# Doppio
 
 ![Unit Tests](https://github.com/NagariaHussain/doppio/actions/workflows/python-app.yml/badge.svg)
 
 A Frappe App to setup and manage single page applications (using Vue 3 or React) on any other custom Frappe App.
 
-### Installation
+## Installation
 
 In your bench directory:
 
@@ -15,12 +15,15 @@ bench get-app https://github.com/NagariaHussain/doppio
 This will install the `Doppio` frappe app on your bench and enable some custom bench CLI commands
 that will ease the process of attaching a SPA to your Frappe Application.
 
-### Usage
+## Setting Up React/Vue SPA
 
-Setting up a new Single Page Application
+To set up a new Single Page Application, you can run the following command in your bench directory:
 
 ```bash
 bench add-spa --app <app-name> [--tailwindcss] [--typescript]
+
+# or just, and answer the prompts
+bench add-spa
 ```
 
 You will be prompted to enter a name for your single page application, this will be the name of the directory and the URI path at which the application will be served. For instance, if you enter `dashboard` (default), then a folder named `dashboard` will be created inside your app's root directory and the application will be served at `/dashboard`.
@@ -66,6 +69,14 @@ yarn dev
 ```
 
 This will start a development server at port `8080` by default (any other port if this port's already in use). You can view the running application at: `<site>:8080`.
+
+## Adding FrappeUI
+
+If you want to add a [frappe-ui](https://github.com/frappe/frappe-ui) starter project to your custom app, you can do that using just a single command:
+
+```bash
+bench add-frappe-ui
+```
 
 ## Building for Production
 

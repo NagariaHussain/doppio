@@ -53,7 +53,8 @@ def add_frappe_ui_starter(name, app):
 	from pathlib import Path
 
 	subprocess.run(
-		["npx", "degit", "netchampfaris/frappe-ui-starter", name], cwd=Path("../apps", app)
+		["npx", "degit", "NagariaHussain/doppio_frappeui_starter", name],
+		cwd=Path("../apps", app),
 	)
 	subprocess.run(["yarn"], cwd=Path("../apps", app, name))
 

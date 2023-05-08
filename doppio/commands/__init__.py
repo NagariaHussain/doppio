@@ -35,14 +35,23 @@ def generate_spa(framework, name, app, typescript, tailwindcss):
 @click.command("add-frappe-ui")
 @click.option("--name", default="frontend", prompt="Dashboard Name")
 @click.option("--app", prompt="App Name")
-def add_frappe_ui_starter(name, app):
-	from pathlib import Path
-
+def add_frappe_ui(name, app):
 	if not app:
 		click.echo("Please provide an app with --app")
 		return
 
 	click.echo(f"Adding Frappe UI starter to {app}...")
+	add_frappe_ui_starter(name, app)
+
+	click.echo(
+		f"🖥️  You can start the dev server by running 'yarn dev' in apps/{app}/{name}"
+	)
+	click.echo("📄  Docs: https://frappeui.com")
+
+
+def add_frappe_ui_starter(name, app):
+	from pathlib import Path
+
 	subprocess.run(
 		["npx", "degit", "netchampfaris/frappe-ui-starter", name], cwd=Path("../apps", app)
 	)
@@ -51,10 +60,5 @@ def add_frappe_ui_starter(name, app):
 	add_build_command_to_package_json(app, name)
 	add_routing_rule_to_hooks(app, name)
 
-	click.echo(
-		f"🖥️  You can start the dev server by running 'yarn dev' in apps/{app}/{name}"
-	)
-	click.echo("📄  Docs: https://frappeui.com")
 
-
-commands = [generate_spa, add_frappe_ui_starter]
+commands = [generate_spa, add_frappe_ui]

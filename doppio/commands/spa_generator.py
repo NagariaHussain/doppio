@@ -186,7 +186,7 @@ class SPAGenerator:
 
 		# For attaching CSRF Token
 		updated_html = current_html.replace(
-			"</div>", "</div>\n\t\t<script>window.csrf_token = '{{ csrf_token }}';</script>"
+			"</div>", "</div>\n\t\t<script>window.csrf_token = '{{ frappe.session.csrf_token }}';</script>"
 		)
 
 		with index_html_file_path.open("w") as f:

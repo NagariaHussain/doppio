@@ -86,6 +86,14 @@ class SPAGenerator:
 
 		create_file(index_css_path, INDEX_CSS_BOILERPLATE)
 
+		# Populate content property in tailwind config file
+		tailwind_config_path: Path = self.spa_path / "tailwind.config.js"
+		tailwind_config = tailwind_config_path.read_text()
+		tailwind_config = tailwind_config.replace(
+			"content: [],", 'content: ["./src/**/*.{html,jsx,tsx,vue,js,ts}"],'
+		)
+		tailwind_config_path.write_text(tailwind_config)
+
 	def create_vue_files(self):
 		app_vue = self.spa_path / "src/App.vue"
 		create_file(app_vue, APP_VUE_BOILERPLATE)

@@ -142,10 +142,10 @@ class SPAGenerator:
 			)
 
 		# Install router and other npm packages
-		# yarn add vue-router@4 socket.io-client@2.4.0
+		# yarn add vue-router@4 socket.io-client@4.5.1
 		print("Installing dependencies...")
 		subprocess.run(
-			["yarn", "add", "vue-router@^4", "socket.io-client@^2.4.0"], cwd=self.spa_path
+			["yarn", "add", "vue-router@^4", "socket.io-client@^4.5.1"], cwd=self.spa_path
 		)
 
 	def link_controller_files(self):
@@ -219,10 +219,10 @@ class SPAGenerator:
 			)
 
 		# Install router and other npm packages
-		# yarn add frappe-react-sdk socket.io-client@2.4.0
+		# yarn add frappe-react-sdk socket.io-client@4.5.1
 		print("Installing dependencies...")
 		subprocess.run(
-			["yarn", "add", "frappe-react-sdk", "socket.io-client@^2.4.0"], cwd=self.spa_path
+			["yarn", "add", "frappe-react-sdk", "socket.io-client@^4.5.1"], cwd=self.spa_path
 		)
 
 	def setup_react_vite_config(self):

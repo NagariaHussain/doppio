@@ -272,3 +272,83 @@ function App() {
 
 export default App
 """
+
+CUSTOM_PAGE_JS_TEMPLATE = """frappe.pages["{{ page_name }}"].on_page_load = function (wrapper) {
+	frappe.ui.make_app_page({
+		parent: wrapper,
+		title: __("{{ page_title }}"),
+		single_column: true,
+	});
+
+	// hot reload in development
+	if (frappe.boot.developer_mode) {
+		frappe.hot_update = frappe.hot_update || [];
+		frappe.hot_update.push(() => load_custom_page(wrapper));
+	}
+};
+
+frappe.pages["{{ page_name }}"].on_page_show = function (wrapper) {
+	load_custom_page(wrapper);
+};
+
+function load_custom_page(wrapper) {
+	let $parent = $(wrapper).find(".layout-main-section");
+	$parent.empty();
+
+	frappe.require("{{ scrubbed_name }}.bundle.js").then(() => {
+		frappe.{{ scrubbed_name }} = new frappe.ui.{{ pascal_cased_name }}({
+			wrapper: $parent,
+			page: wrapper.page,
+		});
+	});
+}
+"""
+
+CUSTOM_PAGE_JS_BUNDLE_TEMPLATE = """import { createApp } from "vue";
+import App from "./App.vue";
+
+
+class {{ pascal_cased_name }} {
+	constructor({ page, wrapper }) {
+		this.$wrapper = $(wrapper);
+		this.page = page;
+
+		this.init();
+	}
+
+	init() {
+		this.setup_page_actions();
+		this.setup_app();
+	}
+
+	setup_page_actions() {
+		// setup page actions
+		this.primary_btn = this.page.set_primary_action(__("Print Message"), () =>
+      frappe.msgprint("Hello Custom Page!")
+		);
+	}
+
+	setup_app() {
+		// create a vue instance
+		let app = createApp(App);
+		// mount the app
+		this.${{ scrubbed_name }} = app.mount(this.$wrapper.get(0));
+	}
+}
+
+frappe.provide("frappe.ui");
+frappe.ui.{{ pascal_cased_name }} = {{ pascal_cased_name }};
+export default {{ pascal_cased_name }};
+"""
+
+CUSTOM_PAGE_APP_COMPONENT_BOILERPLATE = """<script setup>
+import { ref } from "vue";
+
+const dynamicMessage = ref("Hello from App.vue");
+</script>
+<template>
+  <div>
+    <h1>{{ dynamicMessage }}</h1>
+  </div>
+</template>
+"""

@@ -348,7 +348,7 @@ const dynamicMessage = ref("Hello from App.vue");
 </script>
 <template>
   <div>
-    <h1>{{ dynamicMessage }}</h1>
+    <h3>{{ dynamicMessage }}</h3>
   </div>
 </template>
 """

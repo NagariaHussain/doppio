@@ -26,7 +26,14 @@ def setup_custom_page(site, app_name, page_name, starter):
 		limit=1,
 		pluck="name",
 		order_by="creation",
-	)[0]
+	)
+
+	if module_name:
+		module_name = module_name[0]
+	else:
+		message = click.style(f"Make sure {app_name} is installed on the site {site}", fg="yellow")
+		click.echo(message)
+		return
 
 	# create page doc
 	page = frappe.new_doc("Page")

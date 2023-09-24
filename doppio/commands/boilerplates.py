@@ -343,6 +343,7 @@ const dynamicMessage = ref("Hello from App.vue");
 <template>
   <div>
 	<h3>{{ dynamicMessage }}</h3>
+    <h4>Start editing at {{ app_component_path }}</h4>
   </div>
 </template>"""
 
@@ -353,6 +354,7 @@ export function App() {
   return (
     <div>
       <h3>{dynamicMessage}</h3>
+      <h4>Start editing at {{ app_component_path }}</h4>
     </div>
   );
 }"""

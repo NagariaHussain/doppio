@@ -104,11 +104,21 @@ def setup_custom_page_for_framework(framework, page_doc, app_name):
 		app_component_file_name,
 	)
 
+	app_component_path_relative = str(
+		app_name / Path(app_component_path).relative_to(frappe.get_app_path(app_name))
+	)
+
+	app_component_template = None
+	if framework == "vue":
+		app_component_template = CUSTOM_PAGE_VUE_APP_COMPONENT_BOILERPLATE
+	else:
+		app_component_template = CUSTOM_PAGE_REACT_APP_COMPONENT_BOILERPLATE
+
 	with Path(app_component_path).open("w") as f:
-		if framework == "vue":
-			f.write(CUSTOM_PAGE_VUE_APP_COMPONENT_BOILERPLATE)
-		else:
-			f.write(CUSTOM_PAGE_REACT_APP_COMPONENT_BOILERPLATE)
+		app_component_template = frappe.render_template(app_component_template, {
+			"app_component_path": app_component_path_relative,
+		})
+		f.write(app_component_template)
 
 	from frappe.build import bundle
 

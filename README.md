@@ -2,7 +2,7 @@
 
 ![Unit Tests](https://github.com/NagariaHussain/doppio/actions/workflows/python-app.yml/badge.svg)
 
-A Frappe App to setup and manage single page applications (using Vue 3 or React) on any other custom Frappe App.
+A Frappe App to setup and manage single page applications and custom desk pages (using Vue 3 or React) on your custom Frappe App.
 
 ## Installation
 
@@ -77,6 +77,18 @@ If you want to add a [frappe-ui](https://github.com/frappe/frappe-ui) starter pr
 ```bash
 bench add-frappe-ui
 ```
+
+## Creating Custom Pages
+
+If you want to setup Vue 3 or React powered custom desk pages, you can do that with just a single command:
+
+```bash
+bench --site <site-name> add-custom-page --app <app-name>
+```
+
+Follow the prompt to select the framework of your choice and **everything will be setup for you auto-magically**! Once the setup is done, the page will be opened up in the browser.
+
+> Note: Restart your bench to get auto-reload on file changes for your custom app
 
 ## Building for Production
 

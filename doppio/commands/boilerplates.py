@@ -15,23 +15,23 @@ export default {
 
 HOME_VUE_BOILERPLATE = """<template>
   <div>
-    <h1>Home Page</h1>
-    <!-- Fetch the resource on click -->
-    <button @click="$resources.ping.fetch()">Ping</button>
+	<h1>Home Page</h1>
+	<!-- Fetch the resource on click -->
+	<button @click="$resources.ping.fetch()">Ping</button>
   </div>
 </template>
 
 <script>
 export default {
   resources: {
-    ping() {
-      return {
-        method: "frappe.ping", // Method to call on backend
-        onSuccess(d) {
-          alert(d);
-        },
-      };
-    },
+	ping() {
+	  return {
+		method: "frappe.ping", // Method to call on backend
+		onSuccess(d) {
+		  alert(d);
+		},
+	  };
+	},
   },
 };
 </script>
@@ -39,48 +39,48 @@ export default {
 
 LOGIN_VUE_BOILERPLATE = """<template>
   <div class="min-h-screen bg-white flex">
-    <div class="mx-auto w-full max-w-sm lg:w-96">
-      <form @submit.prevent="login" class="space-y-6">
-        <label for="email"> Username: </label>
-        <input type="text" v-model="email" />
-        <br />
-        <label for="password"> Password: </label>
-        <input type="password" v-model="password" />
+	<div class="mx-auto w-full max-w-sm lg:w-96">
+	  <form @submit.prevent="login" class="space-y-6">
+		<label for="email"> Username: </label>
+		<input type="text" v-model="email" />
+		<br />
+		<label for="password"> Password: </label>
+		<input type="password" v-model="password" />
 
-        <button
-          class="bg-blue-500 block text-white p-2 hover:bg-blue-700"
-          type="submit"
-        >
-          Sign in
-        </button>
-      </form>
-    </div>
+		<button
+		  class="bg-blue-500 block text-white p-2 hover:bg-blue-700"
+		  type="submit"
+		>
+		  Sign in
+		</button>
+	  </form>
+	</div>
   </div>
 </template>
 <script>
 export default {
   data() {
-    return {
-      email: null,
-      password: null,
-    };
+	return {
+	  email: null,
+	  password: null,
+	};
   },
   inject: ["$auth"],
   async mounted() {
-    if (this.$route?.query?.route) {
-      this.redirect_route = this.$route.query.route;
-      this.$router.replace({ query: null });
-    }
+	if (this.$route?.query?.route) {
+	  this.redirect_route = this.$route.query.route;
+	  this.$router.replace({ query: null });
+	}
   },
   methods: {
-    async login() {
-      if (this.email && this.password) {
-        let res = await this.$auth.login(this.email, this.password);
-        if (res) {
-          this.$router.push({ name: "Home" });
-        }
-      }
-    },
+	async login() {
+	  if (this.email && this.password) {
+		let res = await this.$auth.login(this.email, this.password);
+		if (res) {
+		  this.$router.push({ name: "Home" });
+		}
+	  }
+	},
   },
 };
 </script>
@@ -177,9 +177,9 @@ import authRoutes from './auth';
 
 const routes = [
   {
-    path: "/",
-    name: "Home",
-    component: Home,
+	path: "/",
+	name: "Home",
+	component: Home,
   },
   ...authRoutes,
 ];
@@ -195,7 +195,7 @@ export default router;
 
 
 AUTH_ROUTES_BOILERPLATE = """export default [
-    {
+	{
 		path: '/login',
 		name: 'Login',
 		component: () =>
@@ -241,32 +241,32 @@ function App() {
   const [count, setCount] = useState(0)
 
   return (
-    <div className="App">
-      <FrappeProvider>
-        <div>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React + Frappe</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-      </div>
-      </FrappeProvider>
-    </div>
+	<div className="App">
+	  <FrappeProvider>
+		<div>
+	  <div>
+		<a href="https://vitejs.dev" target="_blank">
+		  <img src="/vite.svg" className="logo" alt="Vite logo" />
+		</a>
+		<a href="https://reactjs.org" target="_blank">
+		  <img src={reactLogo} className="logo react" alt="React logo" />
+		</a>
+	  </div>
+	  <h1>Vite + React + Frappe</h1>
+	  <div className="card">
+		<button onClick={() => setCount((count) => count + 1)}>
+		  count is {count}
+		</button>
+		<p>
+		  Edit <code>src/App.jsx</code> and save to test HMR
+		</p>
+	  </div>
+	  <p className="read-the-docs">
+		Click on the Vite and React logos to learn more
+	  </p>
+	  </div>
+	  </FrappeProvider>
+	</div>
   )
 }
 
@@ -289,7 +289,7 @@ function load_custom_page(wrapper) {
 	let $parent = $(wrapper).find(".layout-main-section");
 	$parent.empty();
 
-	frappe.require("{{ scrubbed_name }}.bundle.js").then(() => {
+	frappe.require("{{ scrubbed_name }}.bundle.{{ bundle_type }}").then(() => {
 		frappe.{{ scrubbed_name }} = new frappe.ui.{{ pascal_cased_name }}({
 			wrapper: $parent,
 			page: wrapper.page,
@@ -298,7 +298,7 @@ function load_custom_page(wrapper) {
 }
 """
 
-CUSTOM_PAGE_JS_BUNDLE_TEMPLATE = """import { createApp } from "vue";
+CUSTOM_PAGE_JS_BUNDLE_TEMPLATE_VUE = """import { createApp } from "vue";
 import App from "./App.vue";
 
 
@@ -318,7 +318,7 @@ class {{ pascal_cased_name }} {
 	setup_page_actions() {
 		// setup page actions
 		this.primary_btn = this.page.set_primary_action(__("Print Message"), () =>
-      frappe.msgprint("Hello Custom Page!")
+	  frappe.msgprint("Hello Custom Page!")
 		);
 	}
 
@@ -335,14 +335,62 @@ frappe.ui.{{ pascal_cased_name }} = {{ pascal_cased_name }};
 export default {{ pascal_cased_name }};
 """
 
-CUSTOM_PAGE_APP_COMPONENT_BOILERPLATE = """<script setup>
+CUSTOM_PAGE_VUE_APP_COMPONENT_BOILERPLATE = """<script setup>
 import { ref } from "vue";
 
 const dynamicMessage = ref("Hello from App.vue");
 </script>
 <template>
   <div>
-    <h3>{{ dynamicMessage }}</h3>
+	<h3>{{ dynamicMessage }}</h3>
   </div>
-</template>
+</template>"""
+
+CUSTOM_PAGE_REACT_APP_COMPONENT_BOILERPLATE = """import * as React from "react";
+
+export function App() {
+  const dynamicMessage = React.useState("Hello from App.jsx");
+  return (
+    <div>
+      <h3>{dynamicMessage}</h3>
+    </div>
+  );
+}"""
+
+CUSTOM_PAGE_JSX_BUNDLE_TEMPLATE_REACT = """import * as React from "react";
+import { App } from "./App";
+import { createRoot } from "react-dom/client";
+
+
+class {{ pascal_cased_name }} {
+	constructor({ page, wrapper }) {
+		this.$wrapper = $(wrapper);
+		this.page = page;
+
+		this.init();
+	}
+
+	init() {
+		this.setup_page_actions();
+		this.setup_app();
+	}
+
+	setup_page_actions() {
+		// setup page actions
+		this.primary_btn = this.page.set_primary_action(__("Print Message"), () =>
+	  		frappe.msgprint("Hello Custom Page!")
+		);
+	}
+
+	setup_app() {
+		// create and mount the react app
+		const root = createRoot(this.$wrapper.get(0));
+		root.render(<App />);
+		this.${{ scrubbed_name }} = root;
+	}
+}
+
+frappe.provide("frappe.ui");
+frappe.ui.{{ pascal_cased_name }} = {{ pascal_cased_name }};
+export default {{ pascal_cased_name }};
 """

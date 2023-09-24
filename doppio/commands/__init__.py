@@ -69,7 +69,7 @@ def add_frappe_ui_starter(name, app):
 @click.option("--app", prompt="App Name")
 @click.option(
 	"--starter",
-	type=click.Choice(["vue", "simple"]),
+	type=click.Choice(["vue", "react"]),
 	default="vue",
 	prompt="Which framework do you want to use?",
 	help="Setup a custom page with the framework of your choice",

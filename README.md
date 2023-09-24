@@ -1,7 +1,5 @@
 # Doppio
 
-![Unit Tests](https://github.com/NagariaHussain/doppio/actions/workflows/python-app.yml/badge.svg)
-
 A Frappe App to setup and manage single page applications and custom desk pages (using Vue 3 or React) on your custom Frappe App.
 
 ## Installation

@@ -279,12 +279,6 @@ CUSTOM_PAGE_JS_TEMPLATE = """frappe.pages["{{ page_name }}"].on_page_load = func
 		title: __("{{ page_title }}"),
 		single_column: true,
 	});
-
-	// hot reload in development
-	if (frappe.boot.developer_mode) {
-		frappe.hot_update = frappe.hot_update || [];
-		frappe.hot_update.push(() => load_custom_page(wrapper));
-	}
 };
 
 frappe.pages["{{ page_name }}"].on_page_show = function (wrapper) {

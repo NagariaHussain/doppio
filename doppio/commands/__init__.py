@@ -119,9 +119,10 @@ def setup_custom_page(site, app_name, page_name, starter):
 	if starter == "vue":
 		setup_vue_custom_page_starter(page, app_name)
 
-	print("Opening", page.title, "in browser...")
+	click.echo(f"Opening {page.title} in browser...")
 	page_url = f"{frappe.utils.get_site_url(site)}/app/{page.name}"
 	click.launch(page_url)
+	click.echo(click.style("Restart your bench to enable auto-reload of custom page on changes.", fg="yellow"))
 
 
 def setup_vue_custom_page_starter(page_doc, app_name):

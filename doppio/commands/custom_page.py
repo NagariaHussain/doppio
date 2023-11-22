@@ -73,8 +73,10 @@ def setup_custom_page_for_framework(framework, page_doc, app_name):
 		context,
 	)
 
+	# module
+	module = frappe.get_module_list(app_name)[0]
 	js_file_path = os.path.join(
-		frappe.get_module_path(app_name),
+		frappe.get_module_path(module),
 		scrub(page_doc.doctype),
 		scrub(page_doc.name),
 		scrub(page_doc.name) + ".js",

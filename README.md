@@ -76,12 +76,12 @@ If you want to add a [frappe-ui](https://github.com/frappe/frappe-ui) starter pr
 bench add-frappe-ui
 ```
 
-## Creating Custom Pages
+## Creating Desk Pages
 
 If you want to setup Vue 3 or React powered custom desk pages, you can do that with just a single command:
 
 ```bash
-bench --site <site-name> add-custom-page --app <app-name>
+bench --site <site-name> add-desk-page --app <app-name>
 ```
 
 Follow the prompt to select the framework of your choice and **everything will be setup for you auto-magically**! Once the setup is done, the page will be opened up in the browser.

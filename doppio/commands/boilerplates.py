@@ -273,7 +273,7 @@ function App() {
 export default App
 """
 
-CUSTOM_PAGE_JS_TEMPLATE = """frappe.pages["{{ page_name }}"].on_page_load = function (wrapper) {
+DESK_PAGE_JS_TEMPLATE = """frappe.pages["{{ page_name }}"].on_page_load = function (wrapper) {
 	frappe.ui.make_app_page({
 		parent: wrapper,
 		title: __("{{ page_title }}"),
@@ -282,10 +282,10 @@ CUSTOM_PAGE_JS_TEMPLATE = """frappe.pages["{{ page_name }}"].on_page_load = func
 };
 
 frappe.pages["{{ page_name }}"].on_page_show = function (wrapper) {
-	load_custom_page(wrapper);
+	load_desk_page(wrapper);
 };
 
-function load_custom_page(wrapper) {
+function load_desk_page(wrapper) {
 	let $parent = $(wrapper).find(".layout-main-section");
 	$parent.empty();
 
@@ -298,7 +298,7 @@ function load_custom_page(wrapper) {
 }
 """
 
-CUSTOM_PAGE_JS_BUNDLE_TEMPLATE_VUE = """import { createApp } from "vue";
+DESK_PAGE_JS_BUNDLE_TEMPLATE_VUE = """import { createApp } from "vue";
 import App from "./App.vue";
 
 
@@ -318,7 +318,7 @@ class {{ pascal_cased_name }} {
 	setup_page_actions() {
 		// setup page actions
 		this.primary_btn = this.page.set_primary_action(__("Print Message"), () =>
-	  frappe.msgprint("Hello Custom Page!")
+	  frappe.msgprint("Hello My Page!")
 		);
 	}
 
@@ -335,7 +335,7 @@ frappe.ui.{{ pascal_cased_name }} = {{ pascal_cased_name }};
 export default {{ pascal_cased_name }};
 """
 
-CUSTOM_PAGE_VUE_APP_COMPONENT_BOILERPLATE = """<script setup>
+DESK_PAGE_VUE_APP_COMPONENT_BOILERPLATE = """<script setup>
 import { ref } from "vue";
 
 const dynamicMessage = ref("Hello from App.vue");
@@ -347,7 +347,7 @@ const dynamicMessage = ref("Hello from App.vue");
   </div>
 </template>"""
 
-CUSTOM_PAGE_REACT_APP_COMPONENT_BOILERPLATE = """import * as React from "react";
+DESK_PAGE_REACT_APP_COMPONENT_BOILERPLATE = """import * as React from "react";
 
 export function App() {
   const dynamicMessage = React.useState("Hello from App.jsx");
@@ -359,7 +359,7 @@ export function App() {
   );
 }"""
 
-CUSTOM_PAGE_JSX_BUNDLE_TEMPLATE_REACT = """import * as React from "react";
+DESK_PAGE_JSX_BUNDLE_TEMPLATE_REACT = """import * as React from "react";
 import { App } from "./App";
 import { createRoot } from "react-dom/client";
 
@@ -380,7 +380,7 @@ class {{ pascal_cased_name }} {
 	setup_page_actions() {
 		// setup page actions
 		this.primary_btn = this.page.set_primary_action(__("Print Message"), () =>
-	  		frappe.msgprint("Hello Custom Page!")
+	  		frappe.msgprint("Hello My Page!")
 		);
 	}
 

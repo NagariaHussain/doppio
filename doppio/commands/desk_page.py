@@ -7,15 +7,15 @@ from frappe import scrub
 from pathlib import Path
 
 from .boilerplates import (
-	CUSTOM_PAGE_JS_BUNDLE_TEMPLATE_VUE,
-	CUSTOM_PAGE_JS_TEMPLATE,
-	CUSTOM_PAGE_VUE_APP_COMPONENT_BOILERPLATE,
-	CUSTOM_PAGE_JSX_BUNDLE_TEMPLATE_REACT,
-	CUSTOM_PAGE_REACT_APP_COMPONENT_BOILERPLATE,
+	DESK_PAGE_JS_BUNDLE_TEMPLATE_VUE,
+	DESK_PAGE_JS_TEMPLATE,
+	DESK_PAGE_VUE_APP_COMPONENT_BOILERPLATE,
+	DESK_PAGE_JSX_BUNDLE_TEMPLATE_REACT,
+	DESK_PAGE_REACT_APP_COMPONENT_BOILERPLATE,
 )
 
 
-def setup_custom_page(site, app_name, page_name, starter):
+def setup_desk_page(site, app_name, page_name, starter):
 	if not frappe.conf.developer_mode:
 		click.echo("Please enable developer mode to add custom page")
 		return
@@ -23,21 +23,21 @@ def setup_custom_page(site, app_name, page_name, starter):
 	page = create_page_doc(page_name, app_name, site)
 
 	if starter == "vue":
-		setup_vue_custom_page_starter(page, app_name)
+		setup_vue_desk_page_starter(page, app_name)
 	elif starter == "react":
-		setup_react_custom_page_starter(page, app_name)
+		setup_react_desk_page_starter(page, app_name)
 	else:
 		click.echo("Please provide a valid starter")
 		return
 
-	launch_custom_page_in_browser(page, site)
+	launch_desk_page_in_browser(page, site)
 
 
-def setup_vue_custom_page_starter(page_doc, app_name):
-	setup_custom_page_for_framework("vue", page_doc, app_name)
+def setup_vue_desk_page_starter(page_doc, app_name):
+	setup_desk_page_for_framework("vue", page_doc, app_name)
 
 
-def setup_react_custom_page_starter(page_doc, app_name):
+def setup_react_desk_page_starter(page_doc, app_name):
 	# check if package.json exists in app directory
 	# if not, create package.json using npm init --yes
 	package_json_path = Path(frappe.get_app_path(app_name)) / "package.json"
@@ -50,10 +50,10 @@ def setup_react_custom_page_starter(page_doc, app_name):
 		["yarn", "add", "react", "react-dom"], cwd=frappe.get_app_path(app_name)
 	)
 
-	setup_custom_page_for_framework("react", page_doc, app_name)
+	setup_desk_page_for_framework("react", page_doc, app_name)
 
 
-def setup_custom_page_for_framework(framework, page_doc, app_name):
+def setup_desk_page_for_framework(framework, page_doc, app_name):
 	bundle_type = "js" if framework == "vue" else "jsx"
 	context = {
 		"pascal_cased_name": page_doc.name.replace("-", " ").title().replace(" ", ""),
@@ -63,13 +63,13 @@ def setup_custom_page_for_framework(framework, page_doc, app_name):
 		"bundle_type": bundle_type,
 	}
 
-	custom_page_js_file_content = frappe.render_template(
-		CUSTOM_PAGE_JS_TEMPLATE, context
+	desk_page_js_file_content = frappe.render_template(
+		DESK_PAGE_JS_TEMPLATE, context
 	)
-	custom_page_js_bundle_file_content = frappe.render_template(
-		CUSTOM_PAGE_JS_BUNDLE_TEMPLATE_VUE
+	desk_page_js_bundle_file_content = frappe.render_template(
+		DESK_PAGE_JS_BUNDLE_TEMPLATE_VUE
 		if framework == "vue"
-		else CUSTOM_PAGE_JSX_BUNDLE_TEMPLATE_REACT,
+		else DESK_PAGE_JSX_BUNDLE_TEMPLATE_REACT,
 		context,
 	)
 
@@ -90,12 +90,12 @@ def setup_custom_page_for_framework(framework, page_doc, app_name):
 	)
 
 	with Path(js_file_path).open("w") as f:
-		f.write(custom_page_js_file_content)
+		f.write(desk_page_js_file_content)
 
 	# create dir if not exists
 	Path(js_bundle_file_path).parent.mkdir(parents=True, exist_ok=True)
 	with Path(js_bundle_file_path).open("w") as f:
-		f.write(custom_page_js_bundle_file_content)
+		f.write(desk_page_js_bundle_file_content)
 
 	app_component_file_name = "App.vue" if framework == "vue" else "App.jsx"
 	app_component_path = os.path.join(
@@ -112,9 +112,9 @@ def setup_custom_page_for_framework(framework, page_doc, app_name):
 
 	app_component_template = None
 	if framework == "vue":
-		app_component_template = CUSTOM_PAGE_VUE_APP_COMPONENT_BOILERPLATE
+		app_component_template = DESK_PAGE_VUE_APP_COMPONENT_BOILERPLATE
 	else:
-		app_component_template = CUSTOM_PAGE_REACT_APP_COMPONENT_BOILERPLATE
+		app_component_template = DESK_PAGE_REACT_APP_COMPONENT_BOILERPLATE
 
 	with Path(app_component_path).open("w") as f:
 		app_component_template = frappe.render_template(app_component_template, {
@@ -157,7 +157,7 @@ def create_page_doc(page_name, app_name, site):
 	return page
 
 
-def launch_custom_page_in_browser(page, site):
+def launch_desk_page_in_browser(page, site):
 	click.echo(f"Opening {page.title} in browser...")
 	page_url = f"{frappe.utils.get_site_url(site)}/app/{page.name}"
 	click.launch(page_url)

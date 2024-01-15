@@ -222,7 +222,7 @@ class SPAGenerator:
 		# yarn add frappe-react-sdk socket.io-client@4.5.1
 		print("Installing dependencies...")
 		subprocess.run(
-			["yarn", "add", "frappe-react-sdk", "socket.io-client@^4.5.1"], cwd=self.spa_path
+			["yarn", "add", "frappe-react-sdk"], cwd=self.spa_path
 		)
 
 	def setup_react_vite_config(self):

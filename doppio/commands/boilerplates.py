@@ -115,7 +115,7 @@ PROXY_OPTIONS_BOILERPLATE = """const common_site_config = require('../../../site
 const { webserver_port } = common_site_config;
 
 export default {
-	'^/(app|api|assets|files)': {
+	'^/(app|api|assets|files|private)': {
 		target: `http://localhost:${webserver_port}`,
 		ws: true,
 		router: function(req) {

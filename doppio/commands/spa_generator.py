@@ -5,7 +5,7 @@ from pathlib import Path
 from .boilerplates import *
 from .utils import (
 	create_file,
-	add_build_command_to_package_json,
+	add_commands_to_root_package_json,
 	add_routing_rule_to_hooks,
 )
 
@@ -45,7 +45,7 @@ class SPAGenerator:
 			self.create_react_files()
 
 		# Common to all frameworks
-		add_build_command_to_package_json(self.app, self.spa_name)
+		add_commands_to_root_package_json(self.app, self.spa_name)
 		self.create_www_directory()
 		self.add_csrf_to_html()
 
@@ -172,7 +172,9 @@ class SPAGenerator:
 
 	def setup_proxy_options(self):
 		# Setup proxy options file
-		proxy_options_file: Path = self.spa_path / "proxyOptions.js"
+		proxy_options_file: Path = self.spa_path / (
+			"proxyOptions.ts" if self.use_typescript else "proxyOptions.js"
+		)
 		create_file(proxy_options_file, PROXY_OPTIONS_BOILERPLATE)
 
 	def setup_vue_vite_config(self):

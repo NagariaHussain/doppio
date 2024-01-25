@@ -3,7 +3,7 @@ import frappe
 import subprocess
 from .spa_generator import SPAGenerator
 from frappe.commands import get_site, pass_context
-from .utils import add_build_command_to_package_json, add_routing_rule_to_hooks
+from .utils import add_commands_to_root_package_json, add_routing_rule_to_hooks
 from .desk_page import setup_desk_page
 
 
@@ -61,7 +61,7 @@ def add_frappe_ui_starter(name, app):
     )
     subprocess.run(["yarn"], cwd=Path("../apps", app, name))
 
-    add_build_command_to_package_json(app, name)
+    add_commands_to_root_package_json(app, name)
     add_routing_rule_to_hooks(app, name)
 
 

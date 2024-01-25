@@ -15,7 +15,7 @@ def create_file(path: Path, content: str = None):
 			f.write(content)
 
 
-def add_build_command_to_package_json(app, spa_name):
+def add_commands_to_root_package_json(app, spa_name):
 	app_path = Path("../apps") / app
 	spa_path: Path = app_path / spa_name
 	package_json_path: Path = spa_path / "package.json"
@@ -49,6 +49,7 @@ def add_build_command_to_package_json(app, spa_name):
 		with app_package_json_path.open("r") as f:
 			data = json.load(f)
 
+		data["scripts"]["postinstall"] = f"cd {spa_name} && yarn install"
 		data["scripts"]["dev"] = f"cd {spa_name} && yarn dev"
 		data["scripts"]["build"] = f"cd {spa_name} && yarn build"
 

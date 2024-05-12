@@ -1,6 +1,8 @@
 import click
 import frappe
 import subprocess
+from pathlib import Path
+
 from .spa_generator import SPAGenerator
 from frappe.commands import get_site, pass_context
 from .utils import add_commands_to_root_package_json, add_routing_rule_to_hooks
@@ -53,8 +55,6 @@ def add_frappe_ui(name, app):
 
 
 def add_frappe_ui_starter(name, app):
-    from pathlib import Path
-
     subprocess.run(
         ["npx", "degit", "NagariaHussain/doppio_frappeui_starter", name],
         cwd=Path("../apps", app),
@@ -63,6 +63,20 @@ def add_frappe_ui_starter(name, app):
 
     add_commands_to_root_package_json(app, name)
     add_routing_rule_to_hooks(app, name)
+    replace_frontend_name_in_starter(app, name)
+
+
+def replace_frontend_name_in_starter(app, name):
+    spa_path = Path("../apps", app, name)
+    files = ("vite.config.js", "src/router.js")
+
+    for file in files:
+        file_path = spa_path / file
+        fixed_content = ""
+        with file_path.open("r") as f:
+            fixed_content = f.read().replace("/frontend", f"/{name}")
+        with file_path.open("w") as f:
+            f.write(fixed_content)
 
 
 @click.command("add-desk-page")

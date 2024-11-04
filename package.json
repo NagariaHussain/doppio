@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/NagariaHussain/doppio#readme",
   "devDependencies": {
-    "vite": "^2.9.13"
+    "vite": "^5.4.10"
   },
   "dependencies": {
-    "socket.io-client": "^2.4.0",
-    "vue": "^3.2.25"
+    "socket.io-client": "^4.8.1",
+    "vue": "^3.5.12"
   }
 }

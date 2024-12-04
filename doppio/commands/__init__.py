@@ -68,7 +68,7 @@ def add_frappe_ui_starter(name, app):
 
 def replace_frontend_name_in_starter(app, name):
     spa_path = Path("../apps", app, name)
-    files = ("vite.config.js", "src/router.js")
+    files = ("vite.config.js", "src/router/index.js")
 
     for file in files:
         file_path = spa_path / file

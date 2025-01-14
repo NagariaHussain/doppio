@@ -352,7 +352,7 @@ DESK_PAGE_REACT_APP_COMPONENT_BOILERPLATE = """import * as React from "react";
 export function App() {
   const dynamicMessage = React.useState("Hello from App.jsx");
   return (
-    <div>
+    <div className="m-4">
       <h3>{dynamicMessage}</h3>
       <h4>Start editing at {{ app_component_path }}</h4>
     </div>

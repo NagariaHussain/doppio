@@ -96,6 +96,7 @@ export default defineConfig({
 	plugins: [vue()],
 	server: {
 		port: 8080,
+		host: '0.0.0.0',
 		proxy: proxyOptions
 	},
 	resolve: {
@@ -218,6 +219,7 @@ export default defineConfig({
 	plugins: [react()],
 	server: {
 		port: 8080,
+		host: '0.0.0.0',
 		proxy: proxyOptions
 	},
 	resolve: {

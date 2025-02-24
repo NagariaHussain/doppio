@@ -74,7 +74,7 @@ class SPAGenerator:
 		)
 
 		# npx tailwindcss init -p
-		subprocess.run(["npx", "tailwindcss-cli", "init"], cwd=self.spa_path)
+		subprocess.run(["npx", "tailwindcss-cli", "init", "-p"], cwd=self.spa_path)
 
 		# Create an index.css file
 		index_css_path: Path = self.spa_path / "src/index.css"

@@ -43,6 +43,12 @@ class SPAGenerator:
 			self.setup_proxy_options()
 			self.setup_react_vite_config()
 			self.create_react_files()
+   
+		elif self.framework == "svelte":
+			self.initialize_svelte_vite_project()
+			self.setup_proxy_options()
+			self.setup_svelte_vite_config()
+			self.create_svelte_files()
 
 		# Common to all frameworks
 		add_commands_to_root_package_json(self.app, self.spa_name)
@@ -226,6 +232,25 @@ class SPAGenerator:
 		subprocess.run(
 			["yarn", "add", "frappe-react-sdk"], cwd=self.spa_path
 		)
+	def initialize_svelte_vite_project(self):
+		# Run "yarn create vite {name} --template svelte"
+		print("Scaffolding Svelte project...")
+		if self.use_typescript:
+			subprocess.run(
+				["yarn", "create", "vite", self.spa_name, "--template", "svelte-ts"],
+				cwd=self.app_path,
+			)
+		else:
+			subprocess.run(
+				["yarn", "create", "vite", self.spa_name, "--template", "svelte"], cwd=self.app_path
+			)
+
+		# Install router and other npm packages
+		# yarn add frappe-svelte-sdk socket.io-client@4.5.1
+		print("Installing dependencies...")
+		# subprocess.run(
+		# 	["yarn", "add", "frappe-svelte-sdk"], cwd=self.spa_path
+		# )
 
 	def setup_react_vite_config(self):
 		vite_config_file: Path = self.spa_path / (
@@ -237,7 +262,22 @@ class SPAGenerator:
 			boilerplate = REACT_VITE_CONFIG_BOILERPLATE.replace("{{app}}", self.app)
 			boilerplate = boilerplate.replace("{{name}}", self.spa_name)
 			f.write(boilerplate)
+   
+	def setup_svelte_vite_config(self):
+		vite_config_file: Path = self.spa_path / (
+			"vite.config.ts" if self.use_typescript else "vite.config.js"
+		)
+		if not vite_config_file.exists():
+			vite_config_file.touch()
+		with vite_config_file.open("w") as f:
+			boilerplate = SVELTE_VITE_CONFIG_BOILERPLATE.replace("{{app}}", self.app)
+			boilerplate = boilerplate.replace("{{name}}", self.spa_name)
+			f.write(boilerplate)
 
 	def create_react_files(self):
 		app_react = self.spa_path / ("src/App.tsx" if self.use_typescript else "src/App.jsx")
 		create_file(app_react, APP_REACT_BOILERPLATE)
+	def create_svelte_files(self):
+		app_react = self.spa_path / ("src/App.svelte" if self.use_typescript else "src/App.svelte")
+		create_file(app_react, APP_SVELTE_BOILERPLATE)
+		

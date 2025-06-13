@@ -32,17 +32,25 @@ def add_frappe_ui_starter(name, app):
 
     add_commands_to_root_package_json(app, name)
     add_routing_rule_to_hooks(app, name)
-    replace_frontend_name_in_starter(app, name)
+    replace_placeholders_in_starter(app, name)
 
 
-def replace_frontend_name_in_starter(app, name):
+def replace_placeholders_in_starter(app, name):
     spa_path = Path("../apps", app, name)
     files = ("vite.config.js", "src/router.js")
+
+    replacement_map = {
+        "<app_name>": app,
+        "frontend": name
+    }
 
     for file in files:
         file_path = spa_path / file
         fixed_content = ""
         with file_path.open("r") as f:
-            fixed_content = f.read().replace("/frontend", f"/{name}")
+            content = f.read()
+            for placeholder, replacement in replacement_map.items():
+                content = content.replace(placeholder, replacement)
+            fixed_content = content
         with file_path.open("w") as f:
             f.write(fixed_content)

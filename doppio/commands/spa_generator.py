@@ -68,12 +68,13 @@ class SPAGenerator:
 				"tailwindcss@latest",
 				"postcss@latest",
 				"autoprefixer@latest",
+				"tailwindcss-cli",
 			],
 			cwd=self.spa_path,
 		)
 
 		# npx tailwindcss init -p
-		subprocess.run(["npx", "tailwindcss", "init", "-p"], cwd=self.spa_path)
+		subprocess.run(["npx", "tailwindcss-cli", "init", "-p"], cwd=self.spa_path)
 
 		# Create an index.css file
 		index_css_path: Path = self.spa_path / "src/index.css"
@@ -95,7 +96,7 @@ class SPAGenerator:
 		tailwind_config_path: Path = self.spa_path / "tailwind.config.js"
 		tailwind_config = tailwind_config_path.read_text()
 		tailwind_config = tailwind_config.replace(
-			"content: [],", 'content: ["./src/**/*.{html,jsx,tsx,vue,js,ts}"],'
+			"purge: [],", 'content: ["./src/**/*.{html,jsx,tsx,vue,js,ts}"],'
 		)
 		tailwind_config_path.write_text(tailwind_config)
 

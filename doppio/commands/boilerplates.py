@@ -275,6 +275,67 @@ function App() {
 export default App
 """
 
+SVELTE_VITE_CONFIG_BOILERPLATE = """import { defineConfig } from 'vite';
+import { svelte } from '@sveltejs/vite-plugin-svelte';
+import path from 'path';
+import proxyOptions from './proxyOptions';
+
+// https://vitejs.dev/config/
+export default defineConfig({
+	plugins: [svelte()],
+	server: {
+		port: 8080,
+		host: '0.0.0.0',
+		proxy: proxyOptions
+	},
+	resolve: {
+		alias: {
+			'@': path.resolve(__dirname, 'src')
+		}
+	},
+	build: {
+		outDir: '../{{app}}/public/{{name}}',
+		emptyOutDir: true,
+		target: 'es2015',
+	},
+});
+"""
+
+APP_SVELTE_BOILERPLATE = """<script>
+	import { onMount } from 'svelte';
+	let count = 0;
+
+	onMount(() => {
+		console.log('App mounted');
+	});
+</script>
+
+<style>
+	/* Add your styles here */
+</style>
+
+	<div>
+		<div>
+			<a href="https://vitejs.dev" target="_blank">
+				<img src="/vite.svg" class="logo" alt="Vite logo" />
+			</a>
+			<a href="https://svelte.dev" target="_blank">
+				<img src="/svelte-logo.svg" class="logo svelte" alt="Svelte logo" />
+			</a>
+		</div>
+		<h1>Vite + Svelte + Frappe</h1>
+		<div class="card">
+			<button on:click={() => count += 1}>
+				count is {count}
+			</button>
+			<p>Edit <code>src/App.svelte</code> and save to test HMR</p>
+		</div>
+		<p class="read-the-docs">
+			Click on the Vite and Svelte logos to learn more
+		</p>
+	</div>
+"""
+
 DESK_PAGE_JS_TEMPLATE = """frappe.pages["{{ page_name }}"].on_page_load = function (wrapper) {
 	frappe.ui.make_app_page({
 		parent: wrapper,

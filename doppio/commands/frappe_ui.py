@@ -41,6 +41,7 @@ def replace_placeholders_in_starter(app, name):
 
     replacement_map = {
         "<app_name>": app,
+        "<app-name>": app,
         "frontend": name
     }
 

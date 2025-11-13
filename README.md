@@ -18,7 +18,7 @@ that will ease the process of attaching a SPA to your Frappe Application.
 To set up a new Single Page Application, you can run the following command in your bench directory:
 
 ```bash
-bench add-spa --app <app-name> [--tailwindcss] [--typescript]
+bench add-spa --app <app-name> [--tailwindcss] [--typescript] [--shadcn]
 
 # or just, and answer the prompts
 bench add-spa
@@ -30,7 +30,10 @@ You will then be asked to select the framework you prefer: React or Vue.
 
 You can also select whether you want to use Typescript or Javascript.
 
-You can optionally pass the `--tailwindcss` flag which will also setup tailwindCSS (who doesn't like tailwind!) along with the Vue 3/React application.
+You can optionally pass the following flags:
+- `--tailwindcss` - Sets up Tailwind CSS v4 with the new `@tailwindcss/vite` plugin
+- `--typescript` - Configures the project with TypeScript support and path aliases
+- `--shadcn` - Sets up Shadcn UI with beautiful pre-built components (requires `--typescript` and `--tailwindcss`)
 
 The above command will do the following things:
 
@@ -44,9 +47,13 @@ The above command will do the following things:
 
 4. Configure Vite's proxy options (which will be helpful in development), check the `proxyOptions.js` file to see to what ports the Vite dev server proxies the requests (you frappe bench server).
 
-5. Optionally, installs and set up tailwindCSS.
+5. Optionally, installs and set up Tailwind CSS v4.
 
-6. Update the `website_route_rules` hook (in `hooks.py` of your app) to handle the routing of this SPA.
+6. Optionally, sets up TypeScript path aliases for cleaner imports (`@/components`, etc.)
+
+7. Optionally, sets up Shadcn UI with pre-configured component library.
+
+8. Update the `website_route_rules` hook (in `hooks.py` of your app) to handle the routing of this SPA.
 
 ### For React
 
@@ -56,9 +63,13 @@ The above command will do the following things:
 
 3. Configure Vite's proxy options (which will be helpful in development), check the `proxyOptions.js` file to see to what ports the Vite dev server proxies the requests (you frappe bench server).
 
-4. Optionally, installs and set up tailwindCSS.
+4. Optionally, installs and set up Tailwind CSS v4.
 
-5. Update the `website_route_rules` hook (in `hooks.py` of your app) to handle the routing of this SPA.
+5. Optionally, sets up TypeScript path aliases for cleaner imports (`@/components`, etc.)
+
+6. Optionally, sets up Shadcn UI with pre-configured component library.
+
+7. Update the `website_route_rules` hook (in `hooks.py` of your app) to handle the routing of this SPA.
 
 Once the setup is complete, you can `cd` into the SPA directory of your app (e.g. `dashboard`) and run:
 

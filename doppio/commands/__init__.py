@@ -27,11 +27,14 @@ from .desk_page import setup_desk_page
 @click.option(
     "--tailwindcss", default=False, is_flag=True, help="Configure tailwindCSS"
 )
-def generate_spa(framework, name, app, typescript, tailwindcss):
+@click.option(
+    "--shadcn", default=False, is_flag=True, help="Setup Shadcn UI (requires TypeScript and Tailwind)"
+)
+def generate_spa(framework, name, app, typescript, tailwindcss, shadcn):
     if not app:
         click.echo("Please provide an app with --app")
         return
-    generator = SPAGenerator(framework, name, app, tailwindcss, typescript)
+    generator = SPAGenerator(framework, name, app, tailwindcss, typescript, shadcn)
     generator.generate_spa()
 
 @click.command("add-desk-page")

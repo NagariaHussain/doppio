@@ -11,7 +11,7 @@ from .utils import (
 
 
 class SPAGenerator:
-	def __init__(self, framework, spa_name, app, add_tailwindcss, typescript):
+	def __init__(self, framework, spa_name, app, add_tailwindcss, typescript, add_shadcn):
 		"""Initialize a new SPAGenerator instance"""
 		self.framework = framework
 		self.app = app
@@ -20,6 +20,7 @@ class SPAGenerator:
 		self.spa_path: Path = self.app_path / self.spa_name
 		self.add_tailwindcss = add_tailwindcss
 		self.use_typescript = typescript
+		self.add_shadcn = add_shadcn
 
 		self.validate_spa_name()
 
@@ -51,6 +52,18 @@ class SPAGenerator:
 
 		if self.add_tailwindcss:
 			self.setup_tailwindcss()
+
+		# Setup TypeScript path aliases if using TypeScript
+		if self.use_typescript:
+			self.setup_typescript_paths()
+
+		# Setup Shadcn if requested (requires TypeScript and Tailwind)
+		if self.add_shadcn:
+			if not self.use_typescript:
+				click.echo("⚠️  Shadcn requires TypeScript. Adding --typescript flag.", fg="yellow")
+			if not self.add_tailwindcss:
+				click.echo("⚠️  Shadcn requires Tailwind CSS. Adding --tailwindcss flag.", fg="yellow")
+			self.setup_shadcn()
 
 		add_routing_rule_to_hooks(self.app, self.spa_name)
 
@@ -222,3 +235,89 @@ class SPAGenerator:
 	def create_react_files(self):
 		app_react = self.spa_path / ("src/App.tsx" if self.use_typescript else "src/App.jsx")
 		create_file(app_react, APP_REACT_BOILERPLATE)
+
+	def setup_typescript_paths(self):
+		"""Setup TypeScript path aliases for better imports"""
+		click.echo("Setting up TypeScript path aliases...")
+
+		# Update tsconfig.json with path aliases
+		tsconfig_path: Path = self.spa_path / "tsconfig.json"
+		if tsconfig_path.exists():
+			# Replace the entire tsconfig.json with our boilerplate
+			create_file(tsconfig_path, TSCONFIG_JSON_BOILERPLATE)
+
+		# Update tsconfig.app.json with path aliases
+		tsconfig_app_path: Path = self.spa_path / "tsconfig.app.json"
+		if tsconfig_app_path.exists():
+			content = tsconfig_app_path.read_text()
+			# Add paths to compilerOptions if not already there
+			if '"paths"' not in content and '"@/*"' not in content:
+				# Find the compilerOptions section and add paths
+				content = content.replace(
+					'"compilerOptions": {',
+					'"compilerOptions": {\n' + TSCONFIG_APP_JSON_PATHS
+				)
+				tsconfig_app_path.write_text(content)
+
+	def setup_shadcn(self):
+		"""Setup Shadcn UI for beautiful components"""
+		click.echo("Setting up Shadcn UI...")
+
+		# Install @types/node (required for path resolution)
+		subprocess.run(
+			["npm", "install", "-D", "@types/node"],
+			cwd=self.spa_path,
+		)
+
+		# Run shadcn init with default options
+		# Using environment variables to provide answers to the prompts
+		import os
+		env = os.environ.copy()
+
+		# Create components.json directly instead of running init interactively
+		components_json = {
+			"$schema": "https://ui.shadcn.com/schema.json",
+			"style": "new-york",
+			"rsc": False,
+			"tsx": True,
+			"tailwind": {
+				"config": "",
+				"css": "src/index.css",
+				"baseColor": "neutral",
+				"cssVariables": True,
+				"prefix": ""
+			},
+			"aliases": {
+				"components": "@/components",
+				"utils": "@/lib/utils",
+				"ui": "@/components/ui",
+				"lib": "@/lib",
+				"hooks": "@/hooks"
+			}
+		}
+
+		import json
+		components_json_path = self.spa_path / "components.json"
+		with components_json_path.open("w") as f:
+			json.dump(components_json, f, indent=2)
+
+		# Create lib directory and utils.ts
+		lib_dir = self.spa_path / "src/lib"
+		lib_dir.mkdir(exist_ok=True)
+
+		utils_content = '''import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+'''
+		create_file(lib_dir / "utils.ts", utils_content)
+
+		# Install required dependencies
+		subprocess.run(
+			["npm", "install", "clsx", "tailwind-merge"],
+			cwd=self.spa_path,
+		)
+
+		click.echo("✓ Shadcn UI configured! Use 'npx shadcn@latest add <component>' to add components.")

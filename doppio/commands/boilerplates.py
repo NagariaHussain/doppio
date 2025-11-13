@@ -86,31 +86,31 @@ export default {
 </script>
 """
 
-VUE_VITE_CONFIG_BOILERPLATE = """import path from 'path';
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import tailwindcss from '@tailwindcss/vite';
-import proxyOptions from './proxyOptions';
+VUE_VITE_CONFIG_BOILERPLATE = """import path from "path"
+import { defineConfig } from "vite"
+import vue from "@vitejs/plugin-vue"
+import tailwindcss from "@tailwindcss/vite"
+import proxyOptions from "./proxyOptions"
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
 	plugins: [vue(), tailwindcss()],
 	server: {
 		port: 8080,
-		host: '0.0.0.0',
+		host: "0.0.0.0",
 		proxy: proxyOptions
 	},
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, 'src')
+			"@": path.resolve(__dirname, "./src"),
 		}
 	},
 	build: {
-		outDir: '../{{app}}/public/{{name}}',
+		outDir: "../{{app}}/public/{{name}}",
 		emptyOutDir: true,
-		target: 'es2015',
+		target: "es2015",
 	},
-});
+})
 """
 
 PROXY_OPTIONS_BOILERPLATE = """const common_site_config = require('../../../sites/common_site_config.json');
@@ -210,31 +210,31 @@ AUTH_ROUTES_BOILERPLATE = """export default [
 ]
 """
 
-REACT_VITE_CONFIG_BOILERPLATE = """import path from 'path';
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite';
-import proxyOptions from './proxyOptions';
+REACT_VITE_CONFIG_BOILERPLATE = """import path from "path"
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
+import tailwindcss from "@tailwindcss/vite"
+import proxyOptions from "./proxyOptions"
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
 	plugins: [react(), tailwindcss()],
 	server: {
 		port: 8080,
-		host: '0.0.0.0',
+		host: "0.0.0.0",
 		proxy: proxyOptions
 	},
 	resolve: {
 		alias: {
-			'@': path.resolve(__dirname, 'src')
+			"@": path.resolve(__dirname, "./src"),
 		}
 	},
 	build: {
-		outDir: '../{{app}}/public/{{name}}',
+		outDir: "../{{app}}/public/{{name}}",
 		emptyOutDir: true,
-		target: 'es2015',
+		target: "es2015",
 	},
-});
+})
 """
 
 APP_REACT_BOILERPLATE = """import { useState } from 'react'
@@ -400,3 +400,27 @@ frappe.provide("frappe.ui");
 frappe.ui.{{ pascal_cased_name }} = {{ pascal_cased_name }};
 export default {{ pascal_cased_name }};
 """
+
+TSCONFIG_JSON_BOILERPLATE = """{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+"""
+
+TSCONFIG_APP_JSON_PATHS = """    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },"""

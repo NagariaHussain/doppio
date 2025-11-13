@@ -33,7 +33,12 @@ You can also select whether you want to use Typescript or Javascript.
 You can optionally pass the following flags:
 - `--tailwindcss` - Sets up Tailwind CSS v4 with the new `@tailwindcss/vite` plugin
 - `--typescript` - Configures the project with TypeScript support and path aliases
-- `--shadcn` - Sets up Shadcn UI with beautiful pre-built components (requires `--typescript` and `--tailwindcss`)
+- `--shadcn` - **The full package!** Sets up Shadcn UI with:
+  - Pre-installed Button and Card components
+  - Dark mode support with theme toggle (React) or system preference (Vue)
+  - Beautiful starter template with card-based layout
+  - All CSS variables for theming
+  - Ready-to-use component library (requires `--typescript` and `--tailwindcss`)
 
 The above command will do the following things:
 
@@ -78,6 +83,33 @@ yarn dev
 ```
 
 This will start a development server at port `8080` by default (any other port if this port's already in use). You can view the running application at: `<site>:8080`.
+
+### 🎨 Shadcn UI - Beautiful Frontends in Seconds
+
+When you use the `--shadcn` flag, your SPA comes with:
+
+**Out of the box:**
+- ✨ **Beautiful UI** - Professional card-based layout with proper spacing and typography
+- 🌓 **Dark Mode** - Full dark mode support with theme toggle (React) or system preference
+- 🎯 **Pre-installed Components** - Button and Card components ready to use
+- 🎨 **Theme Variables** - Complete CSS variable system for customization
+- 📦 **Component Library** - Access to 50+ Shadcn components
+
+**Example usage:**
+```bash
+# Create a beautiful SPA with all the bells and whistles
+bench add-spa --app myapp --typescript --tailwindcss --shadcn
+
+# Then add more components as needed
+cd myapp/dashboard
+npx shadcn@latest add form input label select
+```
+
+**What you get:**
+- React apps get a theme provider with light/dark/system modes
+- Vue apps get Shadcn-Vue with full component support
+- Both get a beautiful welcome screen showcasing the features
+- All components use Tailwind CSS v4 with proper theming
 
 ## Adding FrappeUI
 

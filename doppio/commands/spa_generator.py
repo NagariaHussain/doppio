@@ -58,46 +58,27 @@ class SPAGenerator:
 		click.echo("to start the development server and visit: http://<site>:8080")
 
 	def setup_tailwindcss(self):
-		# TODO: Convert to yarn command
-		# npm install -D tailwindcss@latest postcss@latest autoprefixer@latest
+		"""Setup Tailwind CSS v4 with @tailwindcss/vite plugin"""
+		# Install Tailwind CSS v4 and the Vite plugin
 		subprocess.run(
 			[
 				"npm",
 				"install",
 				"-D",
 				"tailwindcss@latest",
-				"postcss@latest",
-				"autoprefixer@latest",
+				"@tailwindcss/vite@latest",
 			],
 			cwd=self.spa_path,
 		)
 
-		# npx tailwindcss init -p
-		subprocess.run(["npx", "tailwindcss", "init", "-p"], cwd=self.spa_path)
-
-		# Create an index.css file
+		# Create an index.css file with the new v4 import syntax
 		index_css_path: Path = self.spa_path / "src/index.css"
 
-		# Add boilerplate code
-		INDEX_CSS_BOILERPLATE = """@tailwind base;
-@tailwind components;
-@tailwind utilities;
-	"""
+		# Add Tailwind CSS v4 import
+		INDEX_CSS_BOILERPLATE = """@import "tailwindcss";
+"""
 
 		create_file(index_css_path, INDEX_CSS_BOILERPLATE)
-
-		# Populate content property in tailwind config file
-		# the extension of config can be .js or .ts, so we need to check for both
-		tailwind_config_path: Path = self.spa_path / "tailwind.config.js"
-		if not tailwind_config_path.exists():
-			tailwind_config_path = self.spa_path / "tailwind.config.ts"
-
-		tailwind_config_path: Path = self.spa_path / "tailwind.config.js"
-		tailwind_config = tailwind_config_path.read_text()
-		tailwind_config = tailwind_config.replace(
-			"content: [],", 'content: ["./src/**/*.{html,jsx,tsx,vue,js,ts}"],'
-		)
-		tailwind_config_path.write_text(tailwind_config)
 
 	def create_vue_files(self):
 		app_vue = self.spa_path / "src/App.vue"

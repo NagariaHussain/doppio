@@ -87,15 +87,80 @@ class SPAGenerator:
 		# Create an index.css file with the new v4 import syntax
 		index_css_path: Path = self.spa_path / "src/index.css"
 
-		# Add Tailwind CSS v4 import
-		INDEX_CSS_BOILERPLATE = """@import "tailwindcss";
+		# Add Tailwind CSS v4 import with Shadcn variables if enabled
+		if self.add_shadcn:
+			INDEX_CSS_BOILERPLATE = """@import "tailwindcss";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+"""
+		else:
+			INDEX_CSS_BOILERPLATE = """@import "tailwindcss";
 """
 
 		create_file(index_css_path, INDEX_CSS_BOILERPLATE)
 
 	def create_vue_files(self):
 		app_vue = self.spa_path / "src/App.vue"
-		create_file(app_vue, APP_VUE_BOILERPLATE)
+
+		# Use Shadcn boilerplate if enabled
+		if self.add_shadcn:
+			create_file(app_vue, SHADCN_VUE_APP_BOILERPLATE)
+		else:
+			create_file(app_vue, APP_VUE_BOILERPLATE)
 
 		views_dir: Path = self.spa_path / "src/views"
 		if not views_dir.exists():
@@ -104,7 +169,12 @@ class SPAGenerator:
 		home_vue = views_dir / "Home.vue"
 		login_vue = views_dir / "Login.vue"
 
-		create_file(home_vue, HOME_VUE_BOILERPLATE)
+		# Use Shadcn home boilerplate if enabled
+		if self.add_shadcn:
+			create_file(home_vue, SHADCN_VUE_HOME_BOILERPLATE)
+		else:
+			create_file(home_vue, HOME_VUE_BOILERPLATE)
+
 		create_file(login_vue, LOGIN_VUE_BOILERPLATE)
 
 	def setup_vue_router(self):
@@ -234,7 +304,17 @@ class SPAGenerator:
 
 	def create_react_files(self):
 		app_react = self.spa_path / ("src/App.tsx" if self.use_typescript else "src/App.jsx")
-		create_file(app_react, APP_REACT_BOILERPLATE)
+
+		# Use Shadcn boilerplate if enabled
+		if self.add_shadcn:
+			create_file(app_react, SHADCN_REACT_APP_BOILERPLATE)
+			# Also create the theme provider
+			components_dir = self.spa_path / "src/components"
+			components_dir.mkdir(exist_ok=True)
+			theme_provider = components_dir / "theme-provider.tsx"
+			create_file(theme_provider, THEME_PROVIDER_BOILERPLATE)
+		else:
+			create_file(app_react, APP_REACT_BOILERPLATE)
 
 	def setup_typescript_paths(self):
 		"""Setup TypeScript path aliases for better imports"""
@@ -320,4 +400,33 @@ export function cn(...inputs: ClassValue[]) {
 			cwd=self.spa_path,
 		)
 
-		click.echo("✓ Shadcn UI configured! Use 'npx shadcn@latest add <component>' to add components.")
+		# Install starter components automatically
+		click.echo("Installing starter components (button, card)...")
+
+		if self.framework == "react":
+			# Install radix icons for theme toggle
+			subprocess.run(
+				["npm", "install", "@radix-ui/react-icons"],
+				cwd=self.spa_path,
+			)
+
+			# Install shadcn components
+			subprocess.run(
+				["npx", "shadcn@latest", "add", "button", "card", "-y"],
+				cwd=self.spa_path,
+			)
+		elif self.framework == "vue":
+			# Install radix-vue and icons
+			subprocess.run(
+				["npm", "install", "radix-vue", "@radix-ui/react-icons"],
+				cwd=self.spa_path,
+			)
+
+			# Install shadcn-vue components
+			subprocess.run(
+				["npx", "shadcn-vue@latest", "add", "button", "card", "-y"],
+				cwd=self.spa_path,
+			)
+
+		click.echo("✓ Shadcn UI configured with starter components!")
+		click.echo(f"  Add more: npx shadcn{'- vue' if self.framework == 'vue' else ''}@latest add <component>")

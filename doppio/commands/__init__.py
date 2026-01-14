@@ -12,7 +12,7 @@ from .desk_page import setup_desk_page
 @click.option("--app", prompt="App Name")
 @click.option(
     "--framework",
-    type=click.Choice(["vue", "react"]),
+    type=click.Choice(["vue", "react", "angular"]),
     default="vue",
     prompt="Which framework do you want to use?",
     help="The framework to use for the SPA",

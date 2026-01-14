@@ -30,7 +30,7 @@ def add_frappe_ui_starter(name, app):
     )
     subprocess.run(["yarn"], cwd=Path("../apps", app, name))
 
-    add_commands_to_root_package_json(app, name)
+    add_commands_to_root_package_json(app, name, "vue")
     add_routing_rule_to_hooks(app, name)
     replace_placeholders_in_starter(app, name)
 

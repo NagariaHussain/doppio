@@ -7,6 +7,7 @@ from .utils import (
 	create_file,
 	add_commands_to_root_package_json,
 	add_routing_rule_to_hooks,
+	setup_angular_config_output_path,
 )
 
 
@@ -20,6 +21,7 @@ class SPAGenerator:
 		self.spa_path: Path = self.app_path / self.spa_name
 		self.add_tailwindcss = add_tailwindcss
 		self.use_typescript = typescript
+		self.skip_csrf = False
 
 		self.validate_spa_name()
 
@@ -44,10 +46,18 @@ class SPAGenerator:
 			self.setup_react_vite_config()
 			self.create_react_files()
 
+		elif self.framework == "angular":
+			self.add_tailwindcss = False # Angular cli takes care of the tailwindcss setup
+			self.initialize_angular_project()
+			self.setup_angular_csrf()
+			self.skip_csrf = True
+			setup_angular_config_output_path(self.app, self.spa_name)
+
 		# Common to all frameworks
-		add_commands_to_root_package_json(self.app, self.spa_name)
+		add_commands_to_root_package_json(self.app, self.spa_name, self.framework)
 		self.create_www_directory()
-		self.add_csrf_to_html()
+		if not self.skip_csrf:
+			self.add_csrf_to_html()
 
 		if self.add_tailwindcss:
 			self.setup_tailwindcss()
@@ -241,3 +251,26 @@ class SPAGenerator:
 	def create_react_files(self):
 		app_react = self.spa_path / ("src/App.tsx" if self.use_typescript else "src/App.jsx")
 		create_file(app_react, APP_REACT_BOILERPLATE)
+	
+	def initialize_angular_project(self):
+		# Run "yarn create angular-app {name}"
+		print("Scaffolding Angular project...")
+		subprocess.run(
+			["npx", "@angular/cli", "new", self.spa_name, "--package-manager", "yarn", "--ssr", "false"],
+			cwd=self.app_path,
+		)
+
+	def setup_angular_csrf(self):
+		index_html_file_path = self.spa_path / "src/index.html"
+		with index_html_file_path.open("r") as f:
+			current_html = f.read()
+
+		# For attaching CSRF Token
+		updated_html = current_html.replace(
+			"</body>", "<script>window.csrf_token = '{{ frappe.session.csrf_token }}';</script>\n</body>"
+		)
+
+		with index_html_file_path.open("w") as f:
+			f.write(updated_html)
+
+	

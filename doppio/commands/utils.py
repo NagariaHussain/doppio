@@ -15,7 +15,7 @@ def create_file(path: Path, content: str = None):
 			f.write(content)
 
 
-def add_commands_to_root_package_json(app, spa_name):
+def add_commands_to_root_package_json(app, spa_name, framework):
 	app_path = Path("../apps") / app
 	spa_path: Path = app_path / spa_name
 	package_json_path: Path = spa_path / "package.json"
@@ -28,9 +28,14 @@ def add_commands_to_root_package_json(app, spa_name):
 	with package_json_path.open("r") as f:
 		data = json.load(f)
 
-	data["scripts"][
-		"build"
-	] = f"vite build --base=/assets/{app}/{spa_name}/ && yarn copy-html-entry"
+	if framework == "angular":
+		data["scripts"]["build"] = f"ng build --base-href=/{spa_name}/ --deploy-url=/assets/{app}/{spa_name}/ && yarn copy-html-entry"
+		data["scripts"]["dev"] = "yarn build:dev && yarn watch"
+		data["scripts"]["build:dev"] = f"ng build --base-href=/{spa_name}/ --deploy-url=/assets/{app}/{spa_name}/ --configuration development && yarn copy-html-entry"
+	else:
+		data["scripts"][
+			"build"
+		] = f"vite build --base=/assets/{app}/{spa_name}/ && yarn copy-html-entry"
 
 	data["scripts"]["copy-html-entry"] = (
 		f"cp ../{app}/public/{spa_name}/index.html" f" ../{app}/www/{spa_name}.html"
@@ -78,3 +83,19 @@ def add_routing_rule_to_hooks(app, spa_name):
 	updates_hooks = rules.replace("{rule}", rule)
 	with hooks_py.open("w") as f:
 		f.write(updates_hooks)
+
+def setup_angular_config_output_path(app, spa_name):
+		angular_config_file_path = Path(f"../apps/{app}/{spa_name}") / "angular.json"
+		if not angular_config_file_path.exists():
+			return
+		with angular_config_file_path.open("r") as f:
+			current_config = f.read()
+		if not current_config:
+			return
+		current_config_json = json.loads(current_config)
+		current_config_json["projects"][spa_name]["architect"]["build"]["options"]["outputPath"] = {
+			"base": f"../{app}/public/{spa_name}",
+			"browser": ""
+		}
+		with angular_config_file_path.open("w") as f:
+			json.dump(current_config_json, f, indent=2)

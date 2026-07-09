@@ -12,7 +12,7 @@ from .desk_page import setup_desk_page
 @click.option("--app", prompt="App Name")
 @click.option(
     "--framework",
-    type=click.Choice(["vue", "react"]),
+    type=click.Choice(["vue", "react", "svelte"]),
     default="vue",
     prompt="Which framework do you want to use?",
     help="The framework to use for the SPA",
@@ -39,7 +39,7 @@ def generate_spa(framework, name, app, typescript, tailwindcss):
 @click.option("--app", prompt="App Name")
 @click.option(
     "--starter",
-    type=click.Choice(["vue", "react"]),
+    type=click.Choice(["vue", "react", "svelte"]),
     default="vue",
     prompt="Which framework do you want to use?",
     help="Setup a desk page with the framework of your choice",
